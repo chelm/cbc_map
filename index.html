@@ -9,6 +9,7 @@
         margin: 20px auto;
         border:1px solid #aaa;
         padding: 20px;
+        position:relative;
       }
 
       #vis {
@@ -36,7 +37,7 @@
 
       .funder:hover {
         cursor:pointer;
-        background: #bbb;
+        border: 1px solid
       }
 
       #years {
@@ -62,8 +63,16 @@
       }
 
       #map {
-        height: 325px; 
+        height: 300px; 
       }
+
+      #county_info {
+        position:absolute;
+        right:0px;
+        top:135px;
+        width: 310px;
+        display:none;
+      } 
 
       #charts {
         height: 150px;
@@ -87,6 +96,11 @@
         cursor:pointer;
         fill: #bbb;
       }
+      .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
 
     </style>
 </head>
@@ -96,15 +110,24 @@
       <hr/>
       <div id="vis">
         <div id="controls">
-          <h2>Funders</h2>
+          <h2></h2>
         </div>
       <hr/>
         <div id="map">
-          <h2>Counties</h2>
+          <h2></h2>
+        </div>
+         <div id="county_info">
+          <h2 id="county_name"></h2>
+          <hr/>
+          <div>money</div>
+          <div>grants</div>
+          <div>nonprofits</div>
+          <div>funders</div>
         </div>
       <hr/>
         <div id="charts">
-          <h2>Chart</h2>
+          <h2></h2>
+          <div id="chart"></div>
         </div>
       </div>
     </div>
