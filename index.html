@@ -74,8 +74,14 @@
         display:none;
       } 
 
+      #county_info .stat {
+        font-size: 22px;
+        text-align: right;
+        padding-right: 10px;
+      }
+
       #charts {
-        height: 150px;
+        height: 200px;
       }
 
       h1, h2{
@@ -98,8 +104,12 @@
       }
       .axis path, .axis line {
         fill: none;
-        stroke: #000;
+        stroke: #888;
+        color: #888;
         shape-rendering: crispEdges;
+      }
+      .bar {
+        fill: #A9A9A9;
       }
 
     </style>
@@ -119,10 +129,12 @@
          <div id="county_info">
           <h2 id="county_name"></h2>
           <hr/>
-          <div>money</div>
-          <div>grants</div>
-          <div>nonprofits</div>
-          <div>funders</div>
+          <table style="margin:auto;">
+            <tr id="county_money"></tr>
+            <tr id="county_grants"></tr>
+            <tr id="county_nonprofits"></tr>
+          </table>
+          <div id="county_chart"></div>
         </div>
       <hr/>
         <div id="charts">
