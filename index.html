@@ -7,9 +7,10 @@
       #container {
         width:700px;
         margin: 20px auto;
-        border:1px solid #aaa;
+        border:0px solid #aaa;
         padding: 20px;
         position:relative;
+        font-family:'century gothic';
       }
 
       #vis {
@@ -91,7 +92,7 @@
       }
 
       h1, h2{
-        /*font-size: 34px;*/
+        font-size: 30px;
         font-weight: 300;
         /*letter-spacing: -2px;
         margin: .3em 0 .1em 0;*/
@@ -128,12 +129,50 @@
         text-align: center;
       }
 
+      #header {
+        text-align: left;
+        text-transform: uppercase;
+      }
+
+      #prime-header {
+        font-size: 34px;
+        color:rgb(0, 84, 166);
+      }
+
+      #prime-header #region{
+        font-size: 24px;
+      }
+
+      #sub-header {
+        font-size: 12px;
+        color:#555;
+      }
+
+      #help {
+        font-size: 18px;
+        color:#777;
+      }
+
+      #info {
+        font-size: 10px;
+        color:#777;
+        margin-top:10px;
+      }
+      hr.header_line {
+        border-top:2px solid #555;
+        margin-bottom: 4px;
+      }
+
     </style>
 </head>
 <body>
     <div id="container">
-      <h1>Colorado Rural Philanthropy Days</h1>
-      <hr/>
+      <div id="header">
+        <p id="prime-header">COLORADO DONATIONS: <span id="region">Western Slope</span></p>
+        <span id="sub-header">This is your source for tracking how funds have been allocated in Rural Colorado.</span>
+        <hr class="header_line"/>
+        <span id="help">Hover over a county, or select a foundation - or both! </span>
+      </div>
       <div id="vis">
         <div id="controls"></div>
         <!--div id="funder_data"></div-->
@@ -146,6 +185,12 @@
           <div id="county_data"></div>
           <div id="county_chart"></div>
           <div id=""># of Grants / Year</div>
+        </div>
+        <div id="info">
+        STAY TUNED FOR ADDITIONAL REGIONS IN THE MONTHS AHEAD. ADDITIONALLY, THIS IS A LIVING MAP, AND IT WILL REFLECT OUR 
+MOST CURRENT DATA. DIGITAL DATA MAPPING REPRESENTS THE FUTURE OF DATA MANAGEMENT AND HELPS TO CREATE A BETTER 
+UNDERSTANDING OF A COMMUNITIES NEEDS. THANK YOU TO THE ONGOING SUPPORT OF THE FUNDING ORGANIZATIONS WHO 
+CAME TOGETHER TO DEVELOP THIS NEW PARADIGM IN RURAL PHILANTHROPY.
         </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v0.min.js"></script>
