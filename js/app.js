@@ -189,6 +189,7 @@ function App( path ){
           .on('mouseout', function(){
             d3.select(this).style('stroke', '#AAA');
             d3.select(this).style('stroke-width', .5);
+            updateCountyData();
             //d3.select('#county_info').style('display', 'none');        
           });
     });
