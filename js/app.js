@@ -10,8 +10,8 @@ function App( path ){
 
   function init(){
     _app.vis = d3.select('#vis');
-    _app.cat20 = d3.scale.category20()
-      .range(['#7ED3EO', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#DD6E35']);
+    _app.cat20 = d3.scale.ordinal()
+      .range(['#7ED3EO', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
     _app.orange = d3.scale.quantile()
       .domain([0, 275])
       .range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#8c2d04"])
@@ -26,7 +26,6 @@ function App( path ){
       var county = d.county.toLowerCase();
       //if (_app.counties.indexOf(county) == -1) _app.counties.push(county);
       if (_app.counties.indexOf(county) == -1 && d.region == 'WesternSlope') { 
-        console.log(county, d);
         _app.counties.push(county);
       }
 
@@ -69,12 +68,13 @@ function App( path ){
       return g;
 
     }, function(error, rows) {
+      _app.cat20.domain(_app.funders);
       _app.grants = rows;
       _app.selected = 'all';
       
-      //_app.chart();
-      map();
       controls();
+      map();
+      updateCountyData();
     });
 
   }
@@ -85,12 +85,10 @@ function App( path ){
     if ( funders != 'all' ) {
       d3.selectAll('.funder').style('background', '#aaa');
       funders.forEach(function(f){
-        //console.log(f, d3.select('#'+f.replace(/ /g, '_')));
         d3.select('#'+f.replace(/ /g, '_')).style('background', function(d){ return _app.cat20(f);})
       });
     }
 
-    console.log(funders);
 
     _app.county_agg = {};
     var county_list = [];
@@ -125,9 +123,9 @@ function App( path ){
         }
       }
     });
-    console.log(_app.county_agg, county_list);
    
     _app.orange.domain([0, max]);
+    updateScale();
  
     d3.select("#map").selectAll("path")
       .style('fill', function(d){ 
@@ -136,6 +134,21 @@ function App( path ){
         }
       });
 
+    if (_app.selected == 'all'){
+      _app.showCounty('all');
+    } else if ( _app.selected_county ){
+      _app.showCounty(_app.selected_county );
+    }
+
+  }
+
+  function updateScale(){
+    d3.select('#scale table').remove()
+    d3.select('#scale').append('table').append('tr').selectAll('td')
+      .data(_app.orange.quantiles())
+      .enter().append('td')
+        .style('background', function(d){ return _app.orange(d);})
+        .text(function(d){ return Math.round(d);})
   }
 
   function map(){
@@ -158,17 +171,28 @@ function App( path ){
         .enter().append("path")
           .attr("d", path)
           .attr("class", "county")
-          .style('fill', function(d){ if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) return _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants) })
+          .style('fill', function(d){ 
+            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+              return _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants)
+            }
+          })
           .attr("id", function(d){
             return d.properties.COUNTY;
           })
-          .on('mouseover', function(){
-            if (_app.counties.indexOf(this.id.toLowerCase()) != -1) _app.showCounty( this.id.toLowerCase() );
+          .on('mouseover', function(d){
+            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+              d3.select(this).style('stroke', '#0FF');
+              d3.select(this).style('stroke-width', '4');
+              _app.showCounty( this.id.toLowerCase() );
+            }
           })
           .on('mouseout', function(){
+            d3.select(this).style('stroke', '#AAA');
+            d3.select(this).style('stroke-width', .5);
             //d3.select('#county_info').style('display', 'none');        
-          }) 
-    })
+          });
+    });
+    updateScale();
   }
 
 
@@ -183,7 +207,7 @@ function App( path ){
       .enter().append('div')
         .attr('class', 'funder')
         .attr('id', function(d){ return d.replace(/ /g, '_'); })
-        .style('background', function(d){ return _app.cat20(d); })
+        .style('background', function(d){ return _app.cat20(d.replace(/\./g, '')); })
         .text(function(d){ return d})
         .on('click', function(){
           var f = d3.select(this).data()[0];
@@ -204,26 +228,69 @@ function App( path ){
             _app.selected.splice(_app.selected.indexOf(f),1);
           }
 
+          if ( _app.selected.length == 0 ) {
+            _app.selected = 'all';
+          }
+
           updateCountyData();
         });
 
   }
 
+  function total( agg ){
+
+    var data = {
+          money: 0,
+          grants: 0,
+          grant_years: {
+            2009: 0,
+            2010: 0,
+            2011: 0,
+            2012: 0
+          },
+          nonprofits: []
+    };
+
+    for (var county in agg){
+      var d = agg[county];
+      data.money += d.money;
+      data.grants += d.grants;
+      data.nonprofits += d.nonprofits;
+      for (var yr in d.grant_years){
+        data.grant_years[yr] += d.grant_years[yr];
+      }
+    }
+    return data;
+  }
+
   _app.showCounty = function( name ){
+
+    if (name != 'all'){
+      _app.selected_county = name;
+    }
+    
     var el = d3.select('#county_info');
     el.style('display', 'block');
-    var data = _app.county_agg[name];
+    
+    var totals = total( _app.county_agg );
+  
+    /*if ( name != 'all'){
+      var nfunders = _app.selected.length;
+      var plural = (nfunders == 1 ) ? "funder has" : "funders have"; 
+      var summary = "<span class='stat'>"+ nfunders +" </span> "+plural+" donated <span class='stat'>$"+Math.round(totals.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> in grants to <span class='stat'>" +totals.nonprofits.length + "</span> organizations over <span class='stat'>4</span> years.";
+    }*/
 
-    d3.select('#county_name').text(name.charAt(0).toUpperCase() + name.slice(1) + ' County')
-    d3.select('#county_grants').html('<td class="stat">'+ data.grants +'</td> <td> grants</td>');
-    d3.select('#county_money').html('<td class="stat">$'+ Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td><td> in donations</td>');
-    d3.select('#county_nonprofits').html('<td class="stat">'+ data.nonprofits.length +'</td> <td> organizations </td>');
+    var data = ( name == 'all' ) ? totals : _app.county_agg[ name ];
 
-    d3.select('#county_chart').select('svg').remove();
+    var n = (name == 'all') ? 'Colorado' : name.charAt(0).toUpperCase() + name.slice(1) + ' County';
+    var line = "In <span class='stat'>"+ n +" </span>there have been <span class='stat'>"+data.grants+"</span> grants awarded to <span class='stat'>" +data.nonprofits.length + "</span> organizations for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
+    d3.select('#county_data').html(line);
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    d3.select( '#county_chart' ).select('svg').remove();
+
+    var margin = {top: 20, right: 20, bottom: 20, left: 40},
       width = 300 - margin.left - margin.right,
-      height = 150 - margin.top - margin.bottom;
+      height = 175 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);

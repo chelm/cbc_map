@@ -33,6 +33,7 @@
         margin: 1px;
         padding-top:5px;
         line-height: 10px;
+        color:#fff;
       }
 
       .funder:hover {
@@ -59,25 +60,30 @@
       }
 
       #controls {
-        height:125px;
+        height:95px;
       }
 
       #map {
-        height: 300px; 
+        height: 285px; 
       }
 
       #county_info {
         position:absolute;
         right:0px;
-        top:135px;
+        top:115px;
         width: 310px;
         display:none;
+        text-align: center;
+      }
+
+      #county_data {
+        line-height: 25px;
       } 
 
       #county_info .stat {
-        font-size: 22px;
-        text-align: right;
-        padding-right: 10px;
+        font-size: 20px;
+        color:#000;
+        padding-top:5px; 
       }
 
       #charts {
@@ -105,7 +111,21 @@
         shape-rendering: crispEdges;
       }
       .bar {
-        fill: #A9A9A9;
+        fill: #F58505;
+      }
+
+      #scale table {
+        margin-left:3px;
+      }
+
+      #scale td {
+        width:60px;
+        font-size:12px;
+        text-align: center;
+        text-shadow: 0px 0px 7px #eee;  
+      }
+      #funder_data {
+        text-align: center;
       }
 
     </style>
@@ -115,30 +135,18 @@
       <h1>Colorado Rural Philanthropy Days</h1>
       <hr/>
       <div id="vis">
-        <div id="controls">
-          <h2></h2>
-        </div>
+        <div id="controls"></div>
+        <!--div id="funder_data"></div-->
       <hr/>
         <div id="map">
           <h2></h2>
         </div>
+        <div id="scale"></div>
          <div id="county_info">
-          <h2 id="county_name"></h2>
-          <hr/>
-          <table style="margin:auto; font-size:12px;">
-            <tr id="county_grants"></tr>
-            <tr id="county_money"></tr>
-            <tr id="county_nonprofits"></tr>
-          </table>
+          <div id="county_data"></div>
           <div id="county_chart"></div>
+          <div id=""># of Grants / Year</div>
         </div>
-      <!--hr/>
-        <div id="charts">
-          <h2></h2>
-          <div id="chart"></div>
-        </div>
-      </div>
-    </div-->
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v0.min.js"></script>
     <script src="js/app.js"></script>
