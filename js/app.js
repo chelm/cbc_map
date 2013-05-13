@@ -1,7 +1,7 @@
 function App( path ){
 
   var _app = {
-    funders: ['View All'],
+    funders: [],
     years: [],
     types: [],
     counties: [],
@@ -10,8 +10,8 @@ function App( path ){
 
   function init(){
     _app.vis = d3.select('#vis');
-    _app.cat20 = d3.scale.ordinal()
-      .range(['#7ED3EO', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
+    _app.cat20 = d3.scale.category10()
+      .range(['#7ED3E0', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
     _app.orange = d3.scale.quantile()
       .domain([0, 275])
       .range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#9f2d04"])
@@ -20,7 +20,7 @@ function App( path ){
 
     d3.csv( path, function(d) {
       if (_app.years.indexOf(+d.year) == -1) _app.years.push(+d.year);
-      if (_app.funders.indexOf(d.funder) == -1) _app.funders.push(d.funder);
+      if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
       
       var county = d.county.toLowerCase();
@@ -71,6 +71,15 @@ function App( path ){
       _app.cat20.domain(_app.funders);
       _app.grants = rows;
       _app.selected = 'all';
+
+      d3.select('body').append('div')
+        .attr('id', 'view-all')
+        .text('View All Funders')
+        .on('click', function(){
+          _app.selected = 'all';
+          updateCountyData();
+          d3.select(this).style('display', 'none');
+        });
       
       controls();
       map();
@@ -153,8 +162,8 @@ function App( path ){
 
   function map(){
     var projection = d3.geo.mercator()
-      .center([-100, 37.5])
-      .scale(3000);
+      .center([-102.25, 38.5])
+      .scale(4000);
 
     var path = d3.geo.path().projection(projection);
 
@@ -162,8 +171,8 @@ function App( path ){
       var counties = topojson.object(data, data.objects.counties);
 
       var vis = d3.select("#map").append("svg")
-        .attr("width",400)
-        .attr("height",300);
+        .attr("width",500)
+        .attr("height",400);
 
       vis.append("g")
         .selectAll("path")
@@ -181,8 +190,8 @@ function App( path ){
           })
           .on('mouseover', function(d){
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-              d3.select(this).style('stroke', '#0FF');
-              d3.select(this).style('stroke-width', '4');
+              //d3.select(this).style('stroke', '#0FF');
+              //d3.select(this).style('stroke-width', '4');
               _app.showCounty( this.id.toLowerCase() );
             }
           })
@@ -208,16 +217,17 @@ function App( path ){
       .enter().append('div')
         .attr('class', 'funder')
         .attr('id', function(d){ return d.replace(/ /g, '_'); })
-        .style('background', function(d){ return _app.cat20(d.replace(/\./g, '')); })
+        .style('background', function(d){ return _app.cat20(d); })
         .text(function(d){ return d})
         .on('click', function(){
           var f = d3.select(this).data()[0];
 
-          if (d3.select(this).data()[0] == 'View All'){
+          /*if (d3.select(this).data()[0] == 'View All'){
             _app.selected = 'all';
             updateCountyData();
             return;            
-          }
+          }*/
+          d3.select('#view-all').style('display', 'block');
 
           if (_app.selected == 'all') {
             _app.selected = []; 
@@ -290,8 +300,8 @@ function App( path ){
     d3.select( '#county_chart' ).select('svg').remove();
 
     var margin = {top: 20, right: 20, bottom: 20, left: 40},
-      width = 300 - margin.left - margin.right,
-      height = 175 - margin.top - margin.bottom;
+      width = 400 - margin.left - margin.right,
+      height = 225 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);

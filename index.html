@@ -5,12 +5,18 @@
     <style type="text/css">
   
       #container {
-        width:700px;
+        width:1000px;
         margin: 20px auto;
         border:0px solid #aaa;
         padding: 20px;
         position:relative;
         font-family:'century gothic';
+      }
+
+      #logo {
+        position:absolute;
+        right:-200px;
+        top: -15px;
       }
 
       #vis {
@@ -21,25 +27,45 @@
         width:650px;
         height:100px;
         padding: 5px;
-        margin:auto;
+        position:absolute;
+        right:0px;
       }
 
       .funder {
         float:left;
-        font-size:6pt;
-        width:75px;
-        height:30px;
+        font-size:10pt;
+        width:125px;
+        height:37px;
         border:1px solid #eee;
         text-align: center;
         margin: 1px;
         padding-top:5px;
-        line-height: 10px;
+        line-height: 12px;
         color:#fff;
+      }
+      .funder.selected {
+        border:1px solid #eee;
       }
 
       .funder:hover {
         cursor:pointer;
-        border: 1px solid
+        border: 1px solid;
+        color:#555;
+      }
+
+      #funder-help {
+        position: absolute;
+        left: 0px;
+        font-size: 20px;
+        padding: 10px;
+        width: 300px;
+        text-align: right;
+        line-height: 25px;
+        color: #777;
+      }
+
+      #funder-help small {
+        font-size: 14px;
       }
 
       #years {
@@ -61,17 +87,19 @@
       }
 
       #controls {
-        height:95px;
       }
 
       #map {
-        height: 285px; 
+        position:absolute;
+        left:75px;
+        top:140px;
+        width:400px;
       }
 
       #county_info {
         position:absolute;
-        right:0px;
-        top:115px;
+        right:100px;
+        top:175px;
         width: 310px;
         display:none;
         text-align: center;
@@ -79,6 +107,7 @@
 
       #county_data {
         line-height: 25px;
+        width:400px;
       } 
 
       #county_info .stat {
@@ -115,12 +144,17 @@
         fill: #F58505;
       }
 
+      #scale {
+        position: absolute;
+        top:525px;
+        left:77px;
+      }
       #scale table {
         margin-left:3px;
       }
 
       #scale td {
-        width:60px;
+        width:80px;
         font-size:12px;
         text-align: center;
         text-shadow: 0px 0px 7px #eee;  
@@ -154,13 +188,37 @@
       }
 
       #info {
-        font-size: 10px;
-        color:#777;
-        margin-top:10px;
+        font-size: 14px;
+        color: #777;
+        margin-top: 10px;
+        border-top: 2px solid #555;
+        position: absolute;
+        top: 545px;
+        padding-top: 5px;
       }
       hr.header_line {
         border-top:2px solid #555;
         margin-bottom: 4px;
+      }
+      #chart_title {
+        padding: 10px;
+        position:relative;
+        left:45px;
+      }
+
+      #view-all {
+        position:absolute;
+        top:192px;
+        left: 395px;
+        border:1px solid #AAA;
+        padding:10px;
+        color: #777;
+        background: #eee;
+        display: none; 
+      }
+      #view-all:hover {
+        cursor:pointer;
+        background: #DDD;
       }
 
     </style>
@@ -168,29 +226,26 @@
 <body>
     <div id="container">
       <div id="header">
-        <p id="prime-header">COLORADO DONATIONS: <span id="region">Western Slope</span></p>
-        <span id="sub-header">This is your source for tracking how funds have been allocated in Rural Colorado.</span>
+        <p id="prime-header">Colorado Rural Grants: <span id="region">Western Slope</span></p>
+        <span id="sub-header">Tracking non-profit donations in Rural Colorado.</span>
+        <img id="logo" src="img/logo.png"></img>
         <hr class="header_line"/>
-        <span id="help">Hover over a county, or select a foundation - or both! </span>
+        <!--span id="help">Hover over a county, or select a foundation - or both! </span-->
       </div>
       <div id="vis">
-        <div id="controls"></div>
-        <!--div id="funder_data"></div-->
-      <hr/>
+        <div id="controls">
+          <div id="funder-help">Select funders to see thier combined donations.<br/><small>(choose one or many)</small></div>
+        </div>
         <div id="map">
-          <h2></h2>
         </div>
         <div id="scale"></div>
-         <div id="county_info">
+        <div id="county_info">
           <div id="county_data"></div>
           <div id="county_chart"></div>
-          <div id=""># of Grants / Year</div>
+          <div id="chart_title">Total Grants / Year</div>
         </div>
         <div id="info">
-        STAY TUNED FOR ADDITIONAL REGIONS IN THE MONTHS AHEAD. ADDITIONALLY, THIS IS A LIVING MAP, AND IT WILL REFLECT OUR 
-MOST CURRENT DATA. DIGITAL DATA MAPPING REPRESENTS THE FUTURE OF DATA MANAGEMENT AND HELPS TO CREATE A BETTER 
-UNDERSTANDING OF A COMMUNITIES NEEDS. THANK YOU TO THE ONGOING SUPPORT OF THE FUNDING ORGANIZATIONS WHO 
-CAME TOGETHER TO DEVELOP THIS NEW PARADIGM IN RURAL PHILANTHROPY.
+        Stay tuned for the addition of other rural regions in coming months. As this is a living map, it will reflect our most current data. Digital data mapping represents the future of data management and helps to create a better understanding of a community's needs. Thank you to the El Pomar and Boettcher Foundations for their support in developing this new paradigm in measuring trends in rural philanthropy.
         </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v0.min.js"></script>
