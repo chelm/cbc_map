@@ -72,7 +72,7 @@ function App( path ){
       _app.grants = rows;
       _app.selected = 'all';
 
-      d3.select('body').append('div')
+      d3.select('#controls').append('div')
         .attr('id', 'view-all')
         .text('View All Funders')
         .on('click', function(){
