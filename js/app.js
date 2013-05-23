@@ -137,6 +137,11 @@ function App( path ){
     updateScale();
  
     d3.select("#map").selectAll("path")
+      .style('opacity', function(d){
+        if (county_list.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+          return 1;
+        }
+      })
       .style('fill', function(d){ 
         if (county_list.indexOf(d.properties.COUNTY.toLowerCase()) != -1) { 
           return  _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants); 
@@ -180,6 +185,11 @@ function App( path ){
         .enter().append("path")
           .attr("d", path)
           .attr("class", "county")
+          .style('opacity', function(d){
+            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+              return 1;
+            }
+          })
           .style('fill', function(d){ 
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
               return _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants)
