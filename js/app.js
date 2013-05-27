@@ -299,7 +299,7 @@ function App( path ){
 
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
 
-    var n = (name == 'all') ? 'Colorado' : name.charAt(0).toUpperCase() + name.slice(1) + ' County';
+    var n = (name == 'all') ? 'Colorado' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
     var line = "In <span class='stat'>"+ n +"</span>, these <span class='stat'>"+ funders +"</span> funders have awarded <span class='stat'>"+data.grants+"</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
     d3.select('#county_data').html(line);
 
