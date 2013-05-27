@@ -295,16 +295,12 @@ function App( path ){
     
     var totals = total( _app.county_agg );
   
-    /*if ( name != 'all'){
-      var nfunders = _app.selected.length;
-      var plural = (nfunders == 1 ) ? "funder has" : "funders have"; 
-      var summary = "<span class='stat'>"+ nfunders +" </span> "+plural+" donated <span class='stat'>$"+Math.round(totals.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> in grants to <span class='stat'>" +totals.nonprofits.length + "</span> organizations over <span class='stat'>4</span> years.";
-    }*/
-
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name ];
 
+    var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
+
     var n = (name == 'all') ? 'Colorado' : name.charAt(0).toUpperCase() + name.slice(1) + ' County';
-    var line = "In <span class='stat'>"+ n +" </span>there have been <span class='stat'>"+data.grants+"</span> grants awarded to <span class='stat'>" +data.nonprofits.length + "</span> organizations for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
+    var line = "In <span class='stat'>"+ n +"</span>, these <span class='stat'>"+ funders +"</span> funders have awarded <span class='stat'>"+data.grants+"</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
     d3.select('#county_data').html(line);
 
     d3.select( '#county_chart' ).select('svg').remove();
