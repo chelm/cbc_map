@@ -9,7 +9,7 @@
 
       body {
         background: url(img/parchment_tile.png);
-        font-family:'Forum';
+        /*font-family:'Forum';*/
       }
 
       #container {
@@ -40,7 +40,7 @@
 
       .funder {
         float:left;
-        font-size:11pt;
+        font-size:9pt;
         width:125px;
         height:37px;
         border:1px solid #eee;
@@ -50,7 +50,9 @@
         line-height: 12px;
         color:#fff;
         letter-spacing: 1px;
-        text-shadow: 0px 0px 7px #555;  
+        text-shadow: 0px 0px 7px #555;
+        box-shadow: 1px 2px 5px #555;
+        border-radius: 4px;  
       }
       .funder.selected {
         border:1px solid #eee;
@@ -67,7 +69,7 @@
         position: absolute;
         left: 100px;
         top:10px;
-        font-size: 18px;
+        font-size: 14px;
         padding: 10px;
         width: 200px;
         text-align: center;
@@ -190,7 +192,7 @@
         font-size: 26px;
       }
 
-      #sub-header {
+      .sub-header {
         font-size: 14px;
         color:#555;
       }
@@ -206,7 +208,7 @@
         margin-top: 10px;
         border-top: 2px solid #555;
         position: absolute;
-        top: 545px;
+        top: 575px;
         padding-top: 5px;
         width:100%;
       }
@@ -236,10 +238,34 @@
         height: 22px;
         width:103px;
         text-align: center;
+        box-shadow: 1px 2px 5px #555;
+        border-radius: 4px;
+        z-index: 1;
       }
       #view-all:hover {
         cursor:pointer;
         background: #DDD;
+      }
+      #credit {
+        text-align: center;
+        margin: 10px;
+        font-size: 15px;
+      }
+      #scale-help {
+        text-align: center;
+        margin: 5px;
+        font-size: 12px;
+        position: absolute;
+        top: 540px;
+        left: 115px;
+        width: 400px;
+      }
+
+      #date_info {
+        text-align:center;
+        padding: 10px;
+        position: relative;
+        left: 45px;
       }
 
     </style>
@@ -248,31 +274,34 @@
     <div id="container">
       <div id="header">
         <p id="prime-header">Colorado Rural Grants <span id="region">Western Slope Region</span></p>
-        <span id="sub-header">Tracking non-profit donations in Rural Colorado from 2009 to the PRESENT.</span>
+        <span class="sub-header">Tracking non-profit grants in Rural Colorado from 2009 to the PRESENT.</span>
         <hr class="header_line"/>
-        <!--span id="help">Hover over a county, or select a foundation - or both! </span-->
       </div>
       <div id="vis">
         <div id="controls">
           <div id="funder-help">
             <div><img src="img/top_scroll.png"></div>
-            <div>Select funders to see thier combined donations.<br/>(choose one or many)</div>
+            <div>Select funders to see their combined donations.<br/>(choose one or many)</div>
             <div><img src="img/bottom_scroll.png"></div>
           </div>
         </div>
         <div id="map">
         </div>
         <div id="scale"></div>
+        <div id="scale-help">Colors on the map represent the number of grants awarded to groups in each county. Darker colors  equal more grants.</div>
+        
         <div id="county_info">
           <div id="county_data"></div>
           <div id="county_chart"></div>
           <div id="chart_title">Total Grants / Year</div>
+          <div id="date_info">RPD Dates for the Western Slope:<br/> <b>June 2009</b> and <b>June 2013</b></div>
         </div>
         <div id="info">
         <div class="text">
           Stay tuned for the addition of other rural regions in coming months. As this is a living map, it will reflect our most current data. Digital data mapping represents the future of data management and helps to create a better understanding of a community’s needs. Thank you to the El Pomar and Boettcher Foundations for their support in developing this new paradigm in measuring trends in rural philanthropy.
         </div>
         <img id="logo" src="img/crc_logo.png"></img>
+        <div class="sub-header" id="credit"> A project from <b> The El Pomar and Boettcher Foundations</b> Celebrating 75 years of working, building and giving for Colorado</div>
         </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v0.min.js"></script>
