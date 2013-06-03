@@ -14,7 +14,7 @@ function App( path ){
       .range(['#7ED3E0', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
     _app.orange = d3.scale.quantile()
       .domain([0, 275])
-      .range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#9f2d04"])
+      .range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#9f2d04"]);
 
     _app.data = {};
 
@@ -24,7 +24,6 @@ function App( path ){
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
       
       var county = d.county.toLowerCase();
-      //if (_app.counties.indexOf(county) == -1) _app.counties.push(county);
       if (_app.counties.indexOf(county) == -1 && d.region == 'WesternSlope') { 
         _app.counties.push(county);
       }
@@ -94,7 +93,7 @@ function App( path ){
     if ( funders != 'all' ) {
       d3.selectAll('.funder').style('background', '#aaa');
       funders.forEach(function(f){
-        d3.select('#'+f.replace(/ /g, '_')).style('background', function(d){ return _app.cat20(f);})
+        d3.select('#'+f.replace(/ /g, '_')).style('background', function(d){ return _app.cat20(f);});
       });
     }
 
