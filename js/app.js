@@ -102,7 +102,7 @@ function App( path ){
     var county_list = [];
     var max = 1;
     _app.grants.forEach(function(d){
-      if ( funders.indexOf(d.funder) != -1 && d.region == 'WesternSlope'){ 
+      if ( funders.indexOf(d.funder.replace(/\./g, '')) != -1 && d.region == 'WesternSlope'){ 
         var county = d.county.toLowerCase();
         if (county_list.indexOf(county) == -1) { 
           county_list.push(county);
@@ -256,6 +256,7 @@ function App( path ){
           }
 
           updateCountyData();
+          _app.showCounty('all');
         });
 
   }
@@ -296,7 +297,7 @@ function App( path ){
     el.style('display', 'block');
     
     var totals = total( _app.county_agg );
-    var data = ( name == 'all' ) ? totals : _app.county_agg[ name ];
+    var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders have';  
     var plural = ( funders == 1 ) ? 'this' : 'these';  
