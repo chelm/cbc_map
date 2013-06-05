@@ -223,7 +223,7 @@ function App( path ){
     control_div.append('div')
       .attr('id', 'funders')
       .selectAll('div')
-      .data(_app.funders)
+      .data(_app.funders.sort())
       .enter().append('div')
         .attr('class', 'funder')
         .attr('id', function(d){ return d.replace(/ /g, '_'); })
