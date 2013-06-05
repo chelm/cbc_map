@@ -248,8 +248,8 @@
       }
       #credit {
         text-align: center;
-        margin: 10px;
-        font-size: 15px;
+        margin: 15px;
+        font-size: 17px;
       }
       #scale-help {
         text-align: center;
@@ -266,6 +266,7 @@
         padding: 10px;
         position: relative;
         left: 45px;
+        top: -15px;
       }
 
     </style>
@@ -275,7 +276,7 @@
     <script src="js/app.js"></script>
     <script type="text/javascript">
       function init(){
-        window.map = new App('data/all_grants_5.14.13.csv');
+        window.map = new App('data/all_grants-6.4.13.csv');
       }
     </script>
 </head>
@@ -283,7 +284,7 @@
     <div id="container">
       <div id="header">
         <p id="prime-header">Colorado Rural Grants <span id="region">Western Slope Region</span></p>
-        <span class="sub-header">Tracking non-profit grants in Rural Colorado from 2009 to the PRESENT.</span>
+        <span class="sub-header">Tracking Nonprofit grants in Rural Colorado from 2009 to the PRESENT</span>
         <hr class="header_line"/>
       </div>
       <div id="vis">
@@ -303,14 +304,14 @@
           <div id="county_data"></div>
           <div id="county_chart"></div>
           <div id="chart_title">Total Grants / Year</div>
-          <div id="date_info">RPD Dates for the Western Slope:<br/> <b>June 2009</b> and <b>June 2013</b></div>
+          <div id="date_info">Western Slope Rural Philanthropy Days<br/> <b>June 2009</b><br/><b>June 2013</b></div>
         </div>
         <div id="info">
         <div class="text">
           Stay tuned for the addition of other rural regions in coming months. As this is a living map, it will reflect our most current data. Digital data mapping represents the future of data management and helps to create a better understanding of a community’s needs. Thank you to the El Pomar and Boettcher Foundations for their support in developing this new paradigm in measuring trends in rural philanthropy.
         </div>
         <img id="logo" src="img/crc_logo.png"></img>
-        <div class="sub-header" id="credit"> A project from <a href="http://www.elpomar.org/">The El Pomar</a> and <a href="http://www.boettcherfoundation.org/">Boettcher Foundations</a> Celebrating 75 years of working, building and giving for Colorado</div>
+        <div class="sub-header" id="credit"> A project from the <a href="http://www.elpomar.org/">El Pomar</a> and <a href="http://www.boettcherfoundation.org/">Boettcher Foundation</a> Celebrating 75 years of working, building and giving for Colorado</div>
         </div>
 </body>
 </html>

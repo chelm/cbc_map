@@ -207,7 +207,8 @@ function App( path ){
           .on('mouseout', function(){
             d3.select(this).style('stroke', '#AAA');
             d3.select(this).style('stroke-width', .5);
-            updateCountyData();
+            _app.showCounty('all');
+            //updateCountyData();
             //d3.select('#county_info').style('display', 'none');        
           });
     });
@@ -227,7 +228,8 @@ function App( path ){
         .attr('class', 'funder')
         .attr('id', function(d){ return d.replace(/ /g, '_'); })
         .style('background', function(d){ return _app.cat20(d); })
-        .text(function(d){ return d})
+        //.text(function(d){ return d })
+        .text(function(d){ return (d == 'Helen K and Arthur E Johnson Foundation') ? 'Helen K. and Arthur E. Johnson Foundation' : d; })
         .on('click', function(){
           var f = d3.select(this).data()[0];
 
@@ -250,6 +252,7 @@ function App( path ){
 
           if ( _app.selected.length == 0 ) {
             _app.selected = 'all';
+            d3.select('#view-all').style('display', 'none');
           }
 
           updateCountyData();
@@ -285,6 +288,7 @@ function App( path ){
 
   _app.showCounty = function( name ){
 
+    console.log('show county', name);
     if (name != 'all'){
       _app.selected_county = name;
     }
@@ -298,8 +302,11 @@ function App( path ){
 
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
 
-    var n = (name == 'all') ? 'Colorado' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
-    var line = "In <span class='stat'>"+ n +"</span>, these <span class='stat'>"+ funders +"</span> funders have awarded <span class='stat'>"+data.grants+"</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
+    var len = ( funders == 1 ) ? 'funder has' : 'funders have';  
+    var plural = ( funders == 1 ) ? 'this' : 'these';  
+
+    var n = (name == 'all') ? 'Western Slope' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
+    var line = "In the <span class='stat'>"+ n +"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " have awarded <span class='stat'>"+data.grants+"</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
     d3.select('#county_data').html(line);
 
     d3.select( '#county_chart' ).select('svg').remove();
