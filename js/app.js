@@ -288,7 +288,6 @@ function App( path ){
 
   _app.showCounty = function( name ){
 
-    console.log('show county', name);
     if (name != 'all'){
       _app.selected_county = name;
     }
@@ -297,11 +296,8 @@ function App( path ){
     el.style('display', 'block');
     
     var totals = total( _app.county_agg );
-  
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name ];
-
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
-
     var len = ( funders == 1 ) ? 'funder has' : 'funders have';  
     var plural = ( funders == 1 ) ? 'this' : 'these';  
 
