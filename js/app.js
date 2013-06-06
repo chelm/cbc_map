@@ -67,6 +67,7 @@ function App( path ){
       return g;
 
     }, function(error, rows) {
+      _app.years.sort(function(a,b){ return a < b; });
       _app.cat20.domain(_app.funders);
       _app.grants = rows;
       _app.selected = 'all';
@@ -298,6 +299,7 @@ function App( path ){
     
     var totals = total( _app.county_agg );
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
+    console.log('totals', data.grant_years);
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders have';  
     var plural = ( funders == 1 ) ? 'this' : 'these';  
@@ -332,7 +334,7 @@ function App( path ){
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+    console.log(_app.years)
     x.domain(_app.years);
     y.domain([0, d3.max(Object.keys(data.grant_years), function(d) { return data.grant_years[d]; })]);
 
@@ -349,7 +351,7 @@ function App( path ){
       .data(Object.keys(data.grant_years))
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d); })
+      .attr("x", function(d) { console.log(d); return x(d); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(data.grant_years[d]); })
       .attr("height", function(d) { return height - y(data.grant_years[d]); });
