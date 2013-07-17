@@ -19,6 +19,7 @@ function App( path ){
     _app.data = {};
 
     d3.csv( path, function(d) {
+      
       if (_app.years.indexOf(+d.year) == -1) _app.years.push(+d.year);
       if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
