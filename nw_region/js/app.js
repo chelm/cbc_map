@@ -198,10 +198,32 @@ function App( path ){
           .attr("id", function(d){
             return d.properties.COUNTY;
           })
-          .on('mouseover', function(d){
+          .on('click', function(d){
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-              //d3.select(this).style('stroke', '#0FF');
-              //d3.select(this).style('stroke-width', '4');
+              var poly = d3.select(this);
+              console.log(poly.attr('class'));
+              if ( poly.attr('class') == 'county selected'){
+                poly.attr('class', 'county');
+                _app.showCounty( 'all' );
+                addHover();
+              } else {
+                d3.select('.selected').attr('class', 'county');
+                poly.attr('class', 'county selected');
+                _app.showCounty( this.id.toLowerCase() );
+                removeHover();
+              }  
+            }
+          });
+
+          addHover();
+    });
+    updateScale();
+  }
+
+  function addHover(){
+    d3.selectAll('.county')
+      .on('mouseover', function(d){
+            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
               _app.showCounty( this.id.toLowerCase() );
             }
           })
@@ -209,14 +231,17 @@ function App( path ){
             d3.select(this).style('stroke', '#AAA');
             d3.select(this).style('stroke-width', .5);
             _app.showCounty('all');
-            //updateCountyData();
-            //d3.select('#county_info').style('display', 'none');        
           });
-    });
-    updateScale();
+  } 
+
+  function removeHover(){
+    d3.selectAll('.county')
+      .on('mouseover', function(d){
+      })
+      .on('mouseout', function(){
+      });
   }
-
-
+  
   function controls(){
 
     var control_div = _app.vis.select('#controls')
@@ -300,7 +325,7 @@ function App( path ){
     var totals = total( _app.county_agg );
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
-    var len = ( funders == 1 ) ? 'funder' : 'funders have';  
+    var len = ( funders == 1 ) ? 'funder' : 'funders';  
     var plural = ( funders == 1 ) ? 'this' : 'these';  
 
     var n = (name == 'all') ? 'Northwest' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
@@ -310,8 +335,8 @@ function App( path ){
     d3.select( '#county_chart' ).select('svg').remove();
 
     var margin = {top: 20, right: 20, bottom: 20, left: 40},
-      width = 400 - margin.left - margin.right,
-      height = 225 - margin.top - margin.bottom;
+      width = 450 - margin.left - margin.right,
+      height = 175 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
@@ -354,7 +379,33 @@ function App( path ){
       .attr("y", function(d) { return y(data.grant_years[d]); })
       .attr("height", function(d) { return height - y(data.grant_years[d]); });
 
+    // list grants in table 
+    var tableDiv = d3.select('#grant_table'),
+      rowDiv;
+    if (name == 'all') {
+      d3.selectAll('.grant').remove();
+      _app.grants.forEach(function( g ){
+        rowDiv = tableDiv.append('div');
+        rowDiv.attr('class', 'grant');
+        addRow(rowDiv, g);
+      });
+    } else {
+    }
 
+  }
+
+  function addRow( div, grant ){
+    console.log(grant);
+    div.append('span')
+     .html(grant.funder);
+    div.append('span')
+     .html(grant.nonprofit);
+    div.append('span')
+     .html(grant.amount);
+    div.append('span')
+     .html(grant.year);
+    div.append('span')
+     .html(grant.county);
   }
 
   init();
