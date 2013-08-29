@@ -382,14 +382,21 @@ function App( path ){
     // list grants in table 
     var tableDiv = d3.select('#grant_table'),
       rowDiv;
+    d3.selectAll('.grant').remove();
     if (name == 'all') {
-      d3.selectAll('.grant').remove();
       _app.grants.forEach(function( g ){
         rowDiv = tableDiv.append('div');
         rowDiv.attr('class', 'grant');
         addRow(rowDiv, g);
       });
     } else {
+      _app.grants.forEach(function( g ){
+        if (name.toLowerCase() == g.county.toLowerCase() ){
+          rowDiv = tableDiv.append('div');
+          rowDiv.attr('class', 'grant');
+          addRow(rowDiv, g);
+        }
+      });
     }
 
   }
