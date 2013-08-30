@@ -295,8 +295,8 @@
       #grant_header {
         font-size: 14px;
       }
-      #grant_header span {
-        margin: 0px 20px;
+      #grant_header th{
+        padding: 0px 0px;
       }
 
       #grant_container {
@@ -356,17 +356,27 @@
               <img src="img/leftdb.png" width=100 />
               <span>Grants</span>
               <img src="img/rightdb.png" width=100/>
-              </div>
-            <div id="grant_container">
-            <table id="grant_table">
-              <tr id="grant_header">
-                <th>Funder</th>
-                <th>Recipient</th>
-                <th>Amount</th>
-                <th>Year</th>
-                <th>County</th>
-              </tr>
-            </table>
+            </div>
+            <div>
+              <table>
+                <thead>
+                  <tr id="grant_header">
+                    <th>Funder</th>
+                    <th>Recipient</th>
+                    <th>Amount</th>
+                    <th>Year</th>
+                    <th>County</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan=5>
+                      <div id="grant_container">
+                        <table id="grant_table"></table>
+                      </div>
+                    </td>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
