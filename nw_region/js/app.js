@@ -201,7 +201,6 @@ function App( path ){
           .on('click', function(d){
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
               var poly = d3.select(this);
-              console.log(poly.attr('class'));
               if ( poly.attr('class') == 'county selected'){
                 poly.attr('class', 'county');
                 _app.showCounty( 'all' );
@@ -402,7 +401,6 @@ function App( path ){
   }
 
   function addRow( div, grant ){
-    console.log(grant);
     div.append('td')
      .html(grant.funder);
     div.append('td')
