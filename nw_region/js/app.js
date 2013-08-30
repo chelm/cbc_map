@@ -385,14 +385,14 @@ function App( path ){
     d3.selectAll('.grant').remove();
     if (name == 'all') {
       _app.grants.forEach(function( g ){
-        rowDiv = tableDiv.append('div');
+        rowDiv = tableDiv.append('tr');
         rowDiv.attr('class', 'grant');
         addRow(rowDiv, g);
       });
     } else {
       _app.grants.forEach(function( g ){
         if (name.toLowerCase() == g.county.toLowerCase() ){
-          rowDiv = tableDiv.append('div');
+          rowDiv = tableDiv.append('tr');
           rowDiv.attr('class', 'grant');
           addRow(rowDiv, g);
         }
@@ -403,15 +403,15 @@ function App( path ){
 
   function addRow( div, grant ){
     console.log(grant);
-    div.append('span')
+    div.append('td')
      .html(grant.funder);
-    div.append('span')
+    div.append('td')
      .html(grant.nonprofit);
-    div.append('span')
+    div.append('td')
      .html(grant.amount);
-    div.append('span')
+    div.append('td')
      .html(grant.year);
-    div.append('span')
+    div.append('td')
      .html(grant.county);
   }
 

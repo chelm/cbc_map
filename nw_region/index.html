@@ -228,9 +228,9 @@
       }
 
       #county_header {
-        font-size: 16px;
+        font-size: 20px;
         font-family:'Diplomata', cursive;
-        padding: 5px;
+        padding: 5px 5px;
       }
       #chart_title {
         padding: 10px;
@@ -282,11 +282,10 @@
 
       #grant_list {
         width:450px;
-        height: 240px;
       }
 
       #grant_title {
-        font-size: 18px;
+        font-size: 20px;
         font-family:'Diplomata', cursive;
         padding: 5px;
       }
@@ -298,10 +297,16 @@
         margin: 0px 20px;
       }
 
-      #grant_table {
-        height: 200px;
-        border: 1px solid;
+      #grant_container {
         overflow-y: scroll;
+        height: 220px;
+      }
+
+      .grant td {
+        width: 100px;
+        font-size: 12px;
+        padding: 0px 12px;
+        border-bottom: 1px solid #aaa;
       }
 
     </style>
@@ -346,14 +351,17 @@
           <!--div id="date_info">Northwest Rural Philanthropy Days<br/> <b>June 2009</b><br/><b>June 2013</b></div-->
           <div id="grant_list">
             <div id="grant_title">Grants</div>
-            <div id="grant_header">
-              <span>Funder</span>
-              <span>Recipient</span>
-              <span>Amount</span>
-              <span>Year</span>
-              <span>County</span>
+            <div id="grant_container">
+            <table id="grant_table">
+              <tr id="grant_header">
+                <th>Funder</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Year</th>
+                <th>County</th>
+              </tr>
+            </table>
             </div>
-            <div id="grant_table"></div>
           </div>
         </div>
         <div id="info">
