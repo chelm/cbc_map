@@ -282,6 +282,8 @@
 
       #grant_list {
         width:450px;
+        position: relative;
+        top: 10px;
       }
 
       #grant_title {
@@ -299,6 +301,7 @@
 
       #grant_container {
         overflow-y: scroll;
+        overflow-x: hidden;
         height: 220px;
       }
 
@@ -344,7 +347,6 @@
         <div id="scale-help">Colors on the map represent the number of grants awarded to groups in each county. Darker colors  equal more grants.</div>
         
         <div id="county_info">
-          <div id="county_header">Big Picture</div>
           <div id="county_data"></div>
           <div id="county_chart"></div>
           <div id="chart_title">Total Grants / Year</div>
