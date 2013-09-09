@@ -325,17 +325,17 @@ function App( path ){
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders';  
-    var plural = ( funders == 1 ) ? 'this' : 'these';  
-
-    var n = (name == 'all') ? 'Northwest' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
-    var line = "In the <span class='stat'>"+ n +"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
+    var plural = ( funders == 1 ) ? 'this' : 'these'; 
+    
+    var n = (name == 'all') ? 'the <span class="stat">Northwest</span> region' : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County</span>';
+    var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
     d3.select('#county_data').html(line);
 
     d3.select( '#county_chart' ).select('svg').remove();
 
     var margin = {top: 20, right: 20, bottom: 20, left: 40},
       width = 450 - margin.left - margin.right,
-      height = 175 - margin.top - margin.bottom;
+      height = 200 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
