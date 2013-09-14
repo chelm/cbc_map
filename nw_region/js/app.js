@@ -404,8 +404,10 @@ function App( path ){
     div.append('td')
      .html(grant.funder);
     div.append('td')
+      .attr('class', 'nonprofit')
      .html(grant.nonprofit);
     div.append('td')
+      .attr('class', 'amount')
      .html(grant.amount);
     div.append('td')
      .html(grant.year);
