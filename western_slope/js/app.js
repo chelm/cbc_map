@@ -14,7 +14,9 @@ function App( path ){
       .range(['#7ED3E0', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
     _app.orange = d3.scale.quantile()
       .domain([0, 275])
-      .range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#9f2d04"]);
+      .range(['#008383', '#057777', '#0f696a', '#185b5c', '#1e4c4e', '#223c3f', '#232b30']);
+      //.range(['#90ee90', '#7bd678', '#65be61', '#50a74a', '#3a9034', '#237a1d', '#006400']);
+      //.range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#9f2d04"]);
 
     _app.data = {};
 
@@ -74,11 +76,12 @@ function App( path ){
 
       d3.select('#controls').append('div')
         .attr('id', 'view-all')
-        .text('View All Funders')
+        .html('<span class="glyphicon glyphicon-search"></span> View All Funders')
         .on('click', function(){
           _app.selected = 'all';
           updateCountyData();
           d3.select(this).style('display', 'none');
+          d3.selectAll('.selected').attr('class', 'funder');
         });
       
       controls();
@@ -90,11 +93,10 @@ function App( path ){
 
   function updateCountyData(){
     var funders = (_app.selected == 'all') ? _app.funders : _app.selected;
-
     if ( funders != 'all' ) {
-      d3.selectAll('.funder').style('background', '#aaa');
+      //d3.selectAll('.funder').style('background', '#aaa');
       funders.forEach(function(f){
-        d3.select('#'+f.replace(/ /g, '_')).style('background', function(d){ return _app.cat20(f);});
+        //d3.select('#'+f.replace(/ /g, '_')).style('background', function(d){ return _app.cat20(f);});
       });
     }
 
@@ -166,8 +168,8 @@ function App( path ){
 
   function map(){
     var projection = d3.geo.mercator()
-      .center([-102.25, 38.5])
-      .scale(4000);
+      .center([-100.95, 37.7])
+      .scale(3000);
 
     var path = d3.geo.path().projection(projection);
 
@@ -176,7 +178,7 @@ function App( path ){
 
       var vis = d3.select("#map").append("svg")
         .attr("width",500)
-        .attr("height",400);
+        .attr("height",300);
 
       vis.append("g")
         .selectAll("path")
@@ -227,11 +229,13 @@ function App( path ){
       .enter().append('div')
         .attr('class', 'funder')
         .attr('id', function(d){ return d.replace(/ /g, '_'); })
-        .style('background', function(d){ return _app.cat20(d); })
+        //.style('background', function(d){ return _app.cat20(d); })
         //.text(function(d){ return d })
         .text(function(d){ return (d == 'Helen K and Arthur E Johnson Foundation') ? 'Helen K. and Arthur E. Johnson Foundation' : d; })
         .on('click', function(){
           var f = d3.select(this).data()[0];
+
+          d3.select(this).attr('class', 'selected funder');
 
           /*if (d3.select(this).data()[0] == 'View All'){
             _app.selected = 'all';
@@ -308,9 +312,9 @@ function App( path ){
 
     d3.select( '#county_chart' ).select('svg').remove();
 
-    var margin = {top: 20, right: 20, bottom: 20, left: 40},
+    var margin = {top: 20, right: 20, bottom: 20, left: 30},
       width = 400 - margin.left - margin.right,
-      height = 225 - margin.top - margin.bottom;
+      height = 175 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
