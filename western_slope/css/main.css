@@ -1,0 +1,266 @@
+ body {
+        /* background: url(../img/parchment_tile.png);*/
+        font-family:"Georgia", "Times New Roman", Helvetica, Arial, sans-serif;
+      }
+
+      #container {
+        width:1000px;
+        margin: 20px auto;
+        border:0px solid #aaa;
+        position:relative;
+      }
+
+      #logo {
+        position:absolute;
+        right:0px;
+        top:5px;
+      }
+
+      #vis {
+        position:relative;
+      }
+
+      #funders {
+        height:100px;
+        padding: 5px;
+        position:absolute;
+        top:60px;
+        left:125px
+      }
+
+      .funder {
+        font-size:9pt;
+        width:200px;
+        height:25px;
+        border-bottom:1px solid #E5DED2;
+        border-right:2px solid #fff;
+        text-align: right;
+        margin: 2px;
+        padding:5px 10px 5px 15px;
+        line-height:15px;
+      }
+      .funder.selected {
+        border-right:4px solid #008383;
+      }
+
+      .funder:hover {
+        cursor:pointer;
+        border-right:2px solid #E5DED2;
+        background: #fafafa;
+        color:#555;
+      }
+
+      #funder-help {
+        position: absolute;
+        left: 100px;
+        top:15px;
+        font-size: 14px;
+        padding: 10px;
+        width: 200px;
+        text-align: center;
+        line-height: 20px;
+        color: #777;
+      }
+
+      #funder-help small {
+        font-size: 14px;
+      }
+
+      #years {
+        position:absolute;
+        right:0px;
+        width:250px;
+        height:75px;
+        padding: 10px;
+      }
+      .year {
+        float:left;
+        font-size:10pt;
+        width:58px;
+        height:50px;
+        border:1px solid #eee;
+        text-align: center;
+        margin: 1px;
+        line-height: 25px;
+      }
+
+      #controls {
+      }
+
+      #map {
+        position:absolute;
+        right:250px;
+        top:50px;
+        width:400px;
+      }
+
+      #county_info {
+        position:absolute;
+        right:290px;
+        top:390px;
+        width: 310px;
+        display:none;
+        text-align: center;
+      }
+
+      #county_data {
+        line-height: 22px;
+        width:465px;
+        position: absolute;
+        right: 175px;
+        text-align: center;
+        color:#777;
+        font-size: 13px;
+      } 
+
+      #county_data .stat {
+        font-size: 26px;
+        color:#000;
+        padding-top:5px;
+      }
+
+      #charts {
+        height: 200px;
+      }
+
+      h1, h2{
+        font-size: 30px;
+        font-weight: 300;
+        /*letter-spacing: -2px;
+        margin: .3em 0 .1em 0;*/
+      }
+      hr{
+        margin:0px;
+      }
+      .county {
+        fill: none;
+        stroke: #AAA;
+        stroke-width:.5;
+      }
+      .axis path, .axis line {
+        fill: none;
+        stroke: #888;
+        color: #888;
+        shape-rendering: crispEdges;
+      }
+      .bar {
+        fill:#E5DED2;
+      }
+
+      #scale {
+        position: absolute;
+        top:300px;
+        left:77px;
+      }
+      #scale table {
+        margin-left:3px;
+      }
+
+      #scale td {
+        width:80px;
+        text-align: center;
+        color: #eee;
+        font-size:10px;
+      }
+      #funder_data {
+        text-align: center;
+      }
+
+      #header {
+        text-align: center;
+      }
+
+      #prime-header {
+        font-size: 30px;
+        color: #399;
+        line-height:30px;
+        /*color:rgb(0, 84, 166);*/
+      }
+
+      #prime-header #region{
+        font-size: 30px;
+      }
+
+      .sub-header {
+        position: relative;
+        top: -5px;
+        font-size: 14px;
+        color:#555;
+      }
+
+      #help {
+        font-size: 18px;
+        color:#777;
+      }
+    
+      text {
+        fill: #777;
+      }
+
+      #info {
+        font-size: 12px;
+        color: #777;
+        margin-top: 10px;
+        border-top: 2px solid #eee;
+        position: absolute;
+        top: 600px;
+        padding-top: 5px;
+        width:100%;
+      }
+      #info .text {
+        width:850px;
+      }
+
+      hr.header_line {
+        border-top:2px solid #eee;
+        margin:10px 0px;
+        
+      }
+      #chart_title {
+        position:relative;
+        left:45px;
+        color:#777;
+      }
+
+      #view-all {
+        position:absolute;
+        top:10px;
+        left: 135px;
+        border-bottom:2px solid #B02B2C;
+        padding:10px;
+        color: #777;
+        display: none; 
+        height: 22px;
+        width:200px;
+        text-align: right;
+        font-size:9pt;
+        z-index: 1;
+      }
+      #view-all:hover {
+        cursor:pointer;
+        border-bottom:2px solid #Faa;
+        background: #fafafa;
+      }
+      #credit {
+        text-align: center;
+        margin: 15px;
+        font-size: 14px;
+      }
+      #scale-help {
+        text-align: center;
+        margin: 5px;
+        font-size: 10px;
+        position: absolute;
+        top: 320px;
+        left: 45px;
+        width: 385px;
+        line-height: 10px;
+      }
+
+      #date_info {
+        text-align:center;
+        padding: 10px;
+        position: relative;
+        left: 45px;
+        top: -15px;
+      }
