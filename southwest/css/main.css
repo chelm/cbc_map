@@ -209,11 +209,10 @@
         border-top: 2px solid #eee;
         position: absolute;
         top: 625px;
-        padding-top: 5px;
+        padding: 5px;
         width:100%;
       }
       #info .text {
-        width:850px;
       }
 
       hr.header_line {
