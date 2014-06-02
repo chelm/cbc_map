@@ -1,6 +1,6 @@
  body {
         /* background: url(../img/parchment_tile.png);*/
-        font-family:"Georgia", "Times New Roman", Helvetica, Arial, sans-serif;
+        font-family: 'Istok Web', sans-serif;
       }
 
       #container {
@@ -12,8 +12,8 @@
 
       #logo {
         position:absolute;
-        right:0px;
-        top:5px;
+        right:-100px;
+        top:10px;
       }
 
       #vis {
@@ -39,8 +39,13 @@
         padding:5px 10px 5px 15px;
         line-height:15px;
       }
+      .funder.unselected {
+        color: #aaa;
+      }
       .funder.selected {
-        border-right:4px solid #008383;
+        border-right:4px solid #0d8583;
+        color: #333;
+        font-weight:bold;
       }
 
       .funder:hover {
@@ -97,7 +102,7 @@
       #county_info {
         position:absolute;
         right:290px;
-        top:390px;
+        top:425px;
         width: 310px;
         display:none;
         text-align: center;
@@ -107,7 +112,8 @@
         line-height: 22px;
         width:465px;
         position: absolute;
-        right: 175px;
+        right: 150px;
+        top: 10px;
         text-align: center;
         color:#777;
         font-size: 13px;
@@ -115,7 +121,7 @@
 
       #county_data .stat {
         font-size: 26px;
-        color:#000;
+        color:#0d8583;
         padding-top:5px;
       }
 
@@ -144,13 +150,13 @@
         shape-rendering: crispEdges;
       }
       .bar {
-        fill:#E5DED2;
+        fill:#b6ba9f;
       }
 
       #scale {
         position: absolute;
-        top:300px;
-        left:77px;
+        top:345px;
+        left:113px;
       }
       #scale table {
         margin-left:3px;
@@ -171,10 +177,8 @@
       }
 
       #prime-header {
-        font-size: 30px;
-        color: #399;
-        line-height:30px;
-        /*color:rgb(0, 84, 166);*/
+        font-size: 40px;
+        margin:5px;
       }
 
       #prime-header #region{
@@ -184,7 +188,7 @@
       .sub-header {
         position: relative;
         top: -5px;
-        font-size: 14px;
+        font-size: 17px;
         color:#555;
       }
 
@@ -195,6 +199,7 @@
     
       text {
         fill: #777;
+        font-size:12px;
       }
 
       #info {
@@ -203,7 +208,7 @@
         margin-top: 10px;
         border-top: 2px solid #eee;
         position: absolute;
-        top: 600px;
+        top: 625px;
         padding-top: 5px;
         width:100%;
       }
@@ -226,7 +231,7 @@
         position:absolute;
         top:10px;
         left: 135px;
-        border-bottom:2px solid #B02B2C;
+        border-bottom:2px solid #b72726;
         padding:10px;
         color: #777;
         display: none; 
@@ -238,7 +243,7 @@
       }
       #view-all:hover {
         cursor:pointer;
-        border-bottom:2px solid #Faa;
+        border-bottom:2px solid #b72726;
         background: #fafafa;
       }
       #credit {
@@ -251,8 +256,8 @@
         margin: 5px;
         font-size: 10px;
         position: absolute;
-        top: 320px;
-        left: 45px;
+        top: 360px;
+        left: 68px;
         width: 385px;
         line-height: 10px;
       }

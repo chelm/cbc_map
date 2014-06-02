@@ -14,7 +14,9 @@ function App( path ){
       .range(['#7ED3E0', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
     _app.orange = d3.scale.quantile()
       .domain([0, 275])
-      .range(['#008383', '#057777', '#0f696a', '#185b5c', '#1e4c4e', '#223c3f', '#232b30']);
+      .range(['#b6ba9f', '#a1b19b', '#8ba896', '#74a092', '#5c978e', '#3f8e89', '#0d8585']);
+      //.range(['#0d8583', '#1d6f72', '#235b62', '#244652', '#233342']);
+      //.range(['#008383', '#057777', '#0f696a', '#185b5c', '#1e4c4e', '#223c3f', '#232b30']);
       //.range(['#90ee90', '#7bd678', '#65be61', '#50a74a', '#3a9034', '#237a1d', '#006400']);
       //.range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#9f2d04"]);
 
@@ -26,7 +28,7 @@ function App( path ){
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
       
       var county = d.county.toLowerCase();
-      if (_app.counties.indexOf(county) == -1 && d.region == 'WesternSlope') { 
+      if (_app.counties.indexOf(county) == -1 && d.region == 'Southwest') { 
         _app.counties.push(county);
       }
 
@@ -37,7 +39,8 @@ function App( path ){
           2009: 0, 
           2010: 0,
           2011: 0,
-          2012: 0
+          2012: 0,
+          2013: 0
         },
         nonprofits: []
       };
@@ -81,7 +84,7 @@ function App( path ){
           _app.selected = 'all';
           updateCountyData();
           d3.select(this).style('display', 'none');
-          d3.selectAll('.selected').attr('class', 'funder');
+          d3.selectAll('.funder').attr('class', 'funder');
         });
       
       controls();
@@ -118,7 +121,8 @@ function App( path ){
             2009: 0,
             2010: 0,
             2011: 0,
-            2012: 0
+            2012: 0,
+            2013: 0
           },
           nonprofits: []
         };
@@ -168,8 +172,8 @@ function App( path ){
 
   function map(){
     var projection = d3.geo.mercator()
-      .center([-100.95, 37.7])
-      .scale(3000);
+      .center([-102, 38.2])
+      .scale(3500);
 
     var path = d3.geo.path().projection(projection);
 
@@ -177,8 +181,8 @@ function App( path ){
       var counties = topojson.object(data, data.objects.counties);
 
       var vis = d3.select("#map").append("svg")
-        .attr("width",500)
-        .attr("height",300);
+        .attr("width",600)
+        .attr("height",400);
 
       vis.append("g")
         .selectAll("path")
@@ -234,8 +238,18 @@ function App( path ){
         .text(function(d){ return (d == 'Helen K and Arthur E Johnson Foundation') ? 'Helen K. and Arthur E. Johnson Foundation' : d; })
         .on('click', function(){
           var f = d3.select(this).data()[0];
+          
 
+          d3.selectAll('.funder').attr('class', function(){
+            var f = d3.select(this);
+            if (f[0][0].className != 'selected funder'){
+              return 'unselected funder';
+            } else {
+              return 'selected funder';
+            }
+          });
           d3.select(this).attr('class', 'selected funder');
+          
 
           /*if (d3.select(this).data()[0] == 'View All'){
             _app.selected = 'all';
@@ -274,7 +288,8 @@ function App( path ){
             2009: 0,
             2010: 0,
             2011: 0,
-            2012: 0
+            2012: 0,
+            2013: 0
           },
           nonprofits: []
     };
@@ -306,7 +321,7 @@ function App( path ){
     var len = ( funders == 1 ) ? 'funder' : 'funders have';  
     var plural = ( funders == 1 ) ? 'this' : 'these';  
 
-    var n = (name == 'all') ? 'Western Slope' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
+    var n = (name == 'all') ? 'Southwest' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
     var line = "In the <span class='stat'>"+ n +"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
     d3.select('#county_data').html(line);
 
@@ -336,7 +351,7 @@ function App( path ){
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    x.domain([2009, 2010, 2011, 2012]);
+    x.domain([2009, 2010, 2011, 2012, 2013]);
     y.domain([0, d3.max(Object.keys(data.grant_years), function(d) { return data.grant_years[d]; })]);
 
      svg.append("g")
