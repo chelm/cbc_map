@@ -248,7 +248,13 @@ function App( path ){
               return 'selected funder';
             }
           });
-          d3.select(this).attr('class', 'selected funder');
+          d3.select(this).attr('class', function(d){
+            if (d3.select(this).node().className != 'selected funder'){
+              return 'selected funder';
+            } else {
+              return 'unselected funder';
+            }
+          });
           
 
           /*if (d3.select(this).data()[0] == 'View All'){
@@ -271,6 +277,7 @@ function App( path ){
           if ( _app.selected.length == 0 ) {
             _app.selected = 'all';
             d3.select('#view-all').style('display', 'none');
+            d3.selectAll('.funder').attr('class', 'funder');
           }
 
           updateCountyData();
