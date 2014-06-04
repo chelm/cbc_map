@@ -142,6 +142,7 @@
         fill: none;
         stroke: #AAA;
         stroke-width:.5;
+        opacity: 0.75;
       }
       .axis path, .axis line {
         fill: none;
@@ -150,7 +151,10 @@
         shape-rendering: crispEdges;
       }
       .bar {
-        fill:#b6ba9f;
+        fill:rgb(161, 177, 155);
+      }
+      .bar2 {
+        fill:rgb(92, 151, 142);
       }
 
       #scale {
@@ -224,6 +228,7 @@
         position:relative;
         left:45px;
         color:#777;
+        font-size:12px;
       }
 
       #view-all {

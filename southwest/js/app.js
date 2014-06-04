@@ -42,12 +42,20 @@ function App( path ){
           2012: 0,
           2013: 0
         },
+        grant_years_dollars: {
+          2009: 0,
+          2010: 0,
+          2011: 0,
+          2012: 0,
+          2013: 0
+        },
         nonprofits: []
       };
 
       _app.county_agg[ county ].money += +d.amount;
       _app.county_agg[ county ].grants++;
       _app.county_agg[ county ].grant_years[+d.year]++;
+      _app.county_agg[ county ].grant_years_dollars[+d.year] += +d.amount;
       if (_app.county_agg[ county ].nonprofits.indexOf( d.nonprofit ) == -1) {
         _app.county_agg[ county ].nonprofits.push( d.nonprofit );
       }
@@ -124,6 +132,13 @@ function App( path ){
             2012: 0,
             2013: 0
           },
+          grant_years_dollars: {
+            2009: 0,
+            2010: 0,
+            2011: 0,
+            2012: 0,
+            2013: 0
+          },
           nonprofits: []
         };
         _app.county_agg[ county ].money += +d.amount;
@@ -132,6 +147,7 @@ function App( path ){
           max = _app.county_agg[ county ].grants;
         }
         _app.county_agg[ county ].grant_years[+d.year]++;
+        _app.county_agg[ county ].grant_years_dollars[+d.year] += +d.amount;
         if (_app.county_agg[ county ].nonprofits.indexOf( d.nonprofit ) == -1) {
           _app.county_agg[ county ].nonprofits.push( d.nonprofit );
         }
@@ -190,11 +206,11 @@ function App( path ){
         .enter().append("path")
           .attr("d", path)
           .attr("class", "county")
-          .style('opacity', function(d){
-            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-              return 1;
-            }
-          })
+//          .style('opacity', function(d){
+//            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+//              return 1;
+//            }
+//          })
           .style('fill', function(d){ 
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
               return _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants)
@@ -298,6 +314,13 @@ function App( path ){
             2012: 0,
             2013: 0
           },
+          grant_years_dollars: {
+            2009: 0,
+            2010: 0,
+            2011: 0,
+            2012: 0,
+            2013: 0
+          },
           nonprofits: []
     };
 
@@ -308,6 +331,7 @@ function App( path ){
       data.nonprofits += d.nonprofits;
       for (var yr in d.grant_years){
         data.grant_years[yr] += d.grant_years[yr];
+        data.grant_years_dollars[yr] += d.grant_years_dollars[yr];
       }
     }
     return data;
@@ -326,7 +350,7 @@ function App( path ){
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders have';  
-    var plural = ( funders == 1 ) ? 'this' : 'these';  
+    var plural = ( funders == 1 ) ? 'this' : 'these'; 
 
     var n = (name == 'all') ? 'Southwest' : name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' County';
     var line = "In the <span class='stat'>"+ n +"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
@@ -334,14 +358,17 @@ function App( path ){
 
     d3.select( '#county_chart' ).select('svg').remove();
 
-    var margin = {top: 20, right: 20, bottom: 20, left: 30},
-      width = 400 - margin.left - margin.right,
+    var margin = {top: 30, right: 75, bottom: 20, left: 30},
+      width = 450 - margin.left - margin.right,
       height = 175 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
 
     var y = d3.scale.linear()
+        .rangeRound([height, 0], .1);
+
+    var y1 = d3.scale.linear()
         .rangeRound([height, 0], .1);
 
     var xAxis = d3.svg.axis()
@@ -352,7 +379,11 @@ function App( path ){
         .scale(y)
         .orient("left")
 
-    
+    var yAxis1 = d3.svg.axis()
+        .scale(y1)
+        .ticks(5)
+        .orient("right")
+
     var svg = d3.select('#county_chart').append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -360,24 +391,52 @@ function App( path ){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     x.domain([2009, 2010, 2011, 2012, 2013]);
     y.domain([0, d3.max(Object.keys(data.grant_years), function(d) { return data.grant_years[d]; })]);
+    y1.domain([0, d3.max(Object.keys(data.grant_years_dollars), function(d) { return data.grant_years_dollars[d]; })]);
 
-     svg.append("g")
+    svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
     svg.append("g")
-        .attr("class", "y axis")
+        .attr("class", "y axis axisLeft")
         .call(yAxis)
+      .append("text")
+        .attr("y", -20)
+        .attr("x", 10)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("#/year ");
 
-    svg.selectAll(".bar")
+    svg.append("g")
+        .attr("class", "y1 axis axisRight")
+        .attr("transform", "translate(" + (width) + ", 0)")
+        .call(yAxis1)
+      .append("text")
+        .attr("y", -20)
+        .attr("x", 45)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("$/year ");
+
+
+    var bars = svg.selectAll(".bar")
       .data(Object.keys(data.grant_years))
-    .enter().append("rect")
+      .enter();
+
+    bars.append("rect")
       .attr("class", "bar")
       .attr("x", function(d) { return x(d); })
-      .attr("width", x.rangeBand())
+      .attr("width", x.rangeBand()/2)
       .attr("y", function(d) { return y(data.grant_years[d]); })
       .attr("height", function(d) { return height - y(data.grant_years[d]); });
+
+    bars.append("rect")
+      .attr("class", "bar2")
+      .attr("x", function(d) { return x(d) + (x.rangeBand()/2)+3; })
+      .attr("width", x.rangeBand()/2)
+      .attr("y", function(d) { return y1(data.grant_years_dollars[d]); })
+      .attr("height", function(d) { return height - y1(data.grant_years_dollars[d]); });
 
 
   }
