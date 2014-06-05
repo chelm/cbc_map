@@ -372,6 +372,10 @@ function App( path ){
     var len = ( funders == 1 ) ? 'funder' : 'funders';  
     var plural = ( funders == 1 ) ? 'this' : 'these'; 
 
+    if ( !data ){
+      data = totals;
+    }
+
     var n = (name == 'all') ? "the <span class='stat'>Southwest</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
     d3.select('#county_data').html(line);
