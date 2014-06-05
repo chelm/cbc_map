@@ -352,7 +352,7 @@ function App( path ){
     }
 
     var n = (name == 'all') ? "the <span class='stat'>Southwest</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g,   function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
-    var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.   grants + "</span> grants for a total of " + dollar_text;
+    var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + ((!year) ? data.grants : data.grant_years[year]) + "</span> grants for a total of " + dollar_text;
     d3.select('#county_data').html(line);
 
   };
