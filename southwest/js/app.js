@@ -221,14 +221,14 @@ function App( path ){
           })
           .on('mouseover', function(d){
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-              //d3.select(this).style('stroke', '#0FF');
-              //d3.select(this).style('stroke-width', '4');
+              d3.select(this).style('stroke', '#ddd');
+              d3.select(this).style('stroke-width', 2);
               _app.showCounty( this.id.toLowerCase() );
             }
           })
           .on('mouseout', function(){
             d3.select(this).style('stroke', '#AAA');
-            d3.select(this).style('stroke-width', .5);
+            d3.select(this).style('stroke-width', 1);
             _app.showCounty('all');
             //updateCountyData();
             //d3.select('#county_info').style('display', 'none');        
