@@ -348,7 +348,7 @@ function App( path ){
     if (year){
       var dollar_text = "<span class='stat'>$"+ Math.round(data.grant_years_dollars[year]).toString().replace(/\B(?=(\d{3})+(?!\d))/g,  ',') + "</span> in <span class='stat'>"+year+"</span>.";
     } else { 
-      var dollar_text = "<span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g,  ',') + "</span> over <span class='stat'>4</span> years.";
+      var dollar_text = "<span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g,  ',') + "</span> over <span class='stat'>5</span> years.";
     }
 
     var n = (name == 'all') ? "the <span class='stat'>Southwest</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g,   function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
@@ -377,12 +377,12 @@ function App( path ){
     }
 
     var n = (name == 'all') ? "the <span class='stat'>Southwest</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
-    var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>4</span> years."; 
+    var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>5</span> years."; 
     d3.select('#county_data').html(line);
 
     d3.select( '#county_chart' ).select('svg').remove();
 
-    var margin = {top: 30, right: 30, bottom: 20, left: 30},
+    var margin = {top: 30, right: 30, bottom: 20, left: 65},
       width = 450 - margin.left - margin.right,
       height = 175 - margin.top - margin.bottom;
 
@@ -398,6 +398,7 @@ function App( path ){
 
     var yAxis = d3.svg.axis()
         .scale(y)
+        .ticks(7)
         .orient("left")
 
     var svg = d3.select('#county_chart').append('svg')
@@ -406,7 +407,7 @@ function App( path ){
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     x.domain([2009, 2010, 2011, 2012, 2013]);
-    y.domain([0, d3.max(Object.keys(data.grant_years), function(d) { return data.grant_years[d]; })]);
+    y.domain([0, d3.max(Object.keys(data.grant_years_dollars), function(d) { return data.grant_years_dollars[d]; })]);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -418,15 +419,15 @@ function App( path ){
         .call(yAxis)
 
     var bars = svg.selectAll(".bar")
-      .data(Object.keys(data.grant_years))
+      .data(Object.keys(data.grant_years_dollars))
       .enter();
 
     bars.append("rect")
       .attr("class", "bar")
       .attr("x", function(d) { return x(d)+8; })
       .attr("width", x.rangeBand() * .75)
-      .attr("y", function(d) { return y(data.grant_years[d]); })
-      .attr("height", function(d) { return height - y(data.grant_years[d]); })
+      .attr("y", function(d) { return y(data.grant_years_dollars[d]); })
+      .attr("height", function(d) { return height - y(data.grant_years_dollars[d]); })
       .on('mouseover', function(d){
         _app.buildCountyText( d );
       })
