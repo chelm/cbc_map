@@ -4,7 +4,7 @@
       }
 
       #container {
-        width:1000px;
+        width:720px;
         margin: 20px auto;
         border:0px solid #aaa;
         position:relative;
@@ -20,12 +20,17 @@
         position:relative;
       }
 
+      #right {
+        position: relative;
+        left: 225px;
+      }
+
       #funders {
         height:100px;
         padding: 5px;
         position:absolute;
         top:60px;
-        left:125px
+        left:0
       }
 
       .funder {
@@ -93,16 +98,14 @@
       }
 
       #map {
-        position:absolute;
-        right:250px;
-        top:50px;
+        position:relative;
         width:400px;
       }
 
       #county_info {
-        position:absolute;
-        right:290px;
-        top:425px;
+        position:relative;
+        top:0px;
+        left: 50px;
         width: 310px;
         display:none;
         text-align: center;
@@ -111,9 +114,9 @@
       #county_data {
         line-height: 22px;
         width:465px;
-        position: absolute;
-        right: 150px;
+        position: relative;
         top: 10px;
+        left: 40px;
         text-align: center;
         color:#777;
         font-size: 13px;
@@ -245,7 +248,7 @@
       #view-all {
         position:absolute;
         top:10px;
-        left: 135px;
+        left: 15px;
         border-bottom:2px solid #b72726;
         padding:10px;
         color: #777;
@@ -269,13 +272,13 @@
       #scale-help {
         color:#999;
         text-align: center;
-        margin: 5px;
-        font-size: 10px;
+        margin: 10px 0;
+        font-size: 12px;
         position: absolute;
         top: 360px;
         left: 68px;
         width: 385px;
-        line-height: 10px;
+        line-height: 1.2em;
       }
 
       #date_info {
