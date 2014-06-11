@@ -188,7 +188,7 @@ function App( path ){
 
   function map(){
     var projection = d3.geo.mercator()
-      .center([-102, 38.2])
+      .center([-101.5, 38.2])
       .scale(3500);
 
     var path = d3.geo.path().projection(projection);
@@ -198,7 +198,7 @@ function App( path ){
 
       var vis = d3.select("#map").append("svg")
         .attr("width",600)
-        .attr("height",400);
+        .attr("height",350);
 
       vis.append("g")
         .selectAll("path")
