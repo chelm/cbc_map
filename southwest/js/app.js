@@ -197,7 +197,7 @@ function App( path ){
       var counties = topojson.object(data, data.objects.counties);
 
       var vis = d3.select("#map").append("svg")
-        .attr("width",600)
+        .attr("width",460)
         .attr("height",350);
 
       vis.append("g")
