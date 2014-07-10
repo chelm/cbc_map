@@ -27,7 +27,7 @@ function App( path ){
       if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
       
-      var county = d.county.toLowerCase();
+      var county = d.county.toLowerCase().trim();
       if (_app.counties.indexOf(county) == -1 && d.region == 'WesternSlope') { 
         _app.counties.push(county);
       }
@@ -66,7 +66,7 @@ function App( path ){
         nonprofit: d.nonprofit,
         amount: +d.amount,
         city: d.city,
-        county: d.county,
+        county: d.county.trim(),
         region: d.region,
         type: d.type, 
         category: d.category
@@ -117,7 +117,7 @@ function App( path ){
     var max = 1;
     _app.grants.forEach(function(d, i){
       if ( funders.indexOf(d.funder.replace(/\./g, '')) != -1){ 
-        var county = d.county.toLowerCase();
+        var county = d.county.toLowerCase().trim();
         if (county_list.indexOf(county) == -1) { 
           county_list.push(county);
         }
