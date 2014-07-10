@@ -106,6 +106,9 @@ line-height:2.2em;
         stroke-width:.5;
         opacity: 0.75;
       }
+      path.selected {
+        fill: #4F94CD !important;
+      }
       .axis path, .axis line {
         fill: none;
         stroke: #888;

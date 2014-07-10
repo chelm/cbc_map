@@ -170,9 +170,9 @@ function App( path ){
       });
 
     if (_app.selected == 'all'){
-      _app.showCounty('all');
+      _app.showCounty( 'all' );
     } else if ( _app.selected_county ){
-      _app.showCounty(_app.selected_county );
+      _app.showCounty( _app.selected_county );
     }
 
   }
@@ -219,23 +219,54 @@ function App( path ){
           .attr("id", function(d){
             return d.properties.COUNTY;
           })
-          .on('mouseover', function(d){
+           .on('click', function(d){
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-              d3.select(this).style('stroke', '#ddd');
-              d3.select(this).style('stroke-width', 2);
-              _app.showCounty( this.id.toLowerCase() );
+              var poly = d3.select(this);
+              if ( poly.attr('class') == 'county selected'){
+                poly.attr('class', 'county');
+                _app.showCounty( 'all' );
+                _app.clicked_county = null;
+                addHover();
+              } else {
+                d3.select('.selected').attr('class', 'county');
+                poly.attr('class', 'county selected');
+                _app.clicked_county = this.id.toLowerCase();
+                _app.showCounty( this.id.toLowerCase() );
+                removeHover();
+              }  
             }
-          })
-          .on('mouseout', function(){
-            d3.select(this).style('stroke', '#AAA');
-            d3.select(this).style('stroke-width', 1);
-            _app.showCounty('all');
-            //updateCountyData();
-            //d3.select('#county_info').style('display', 'none');        
           });
+
+          addHover();
+
     });
     updateScale();
   }
+
+
+  function addHover(){
+    d3.selectAll('.county')
+      .on('mouseover', function(d){
+        if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+          d3.select(this).style('stroke', '#ddd');
+          d3.select(this).style('stroke-width', 2);
+          _app.showCounty( this.id.toLowerCase() );
+        }
+      })
+      .on('mouseout', function(){
+        d3.select(this).style('stroke', '#AAA');
+        d3.select(this).style('stroke-width', 1);
+        _app.showCounty('all');
+      });
+  } 
+
+
+  function removeHover(){
+    d3.selectAll('.county')
+      .on('mouseover', function(d){ })
+      .on('mouseout', function(){ });
+  }
+  
 
 
   function controls(){
@@ -338,7 +369,7 @@ function App( path ){
   };
 
   _app.buildCountyText = function( year ){
-    var name = 'all'; //_app.selected_county;
+    var name = ( !_app.clicked_county ) ? 'all' : _app.clicked_county;
     var totals = total( _app.county_agg );
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
