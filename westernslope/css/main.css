@@ -101,7 +101,7 @@ line-height:2.2em;
         margin:0px;
       }
       .county {
-        fill: none;
+        fill: #fff;
         stroke: #AAA;
         stroke-width:.5;
         opacity: 0.75;

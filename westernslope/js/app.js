@@ -228,7 +228,7 @@ function App( path ){
                 _app.clicked_county = null;
                 addHover();
               } else {
-                d3.select('.selected').attr('class', 'county');
+                d3.select('.county.selected').attr('class', 'county');
                 poly.attr('class', 'county selected');
                 _app.clicked_county = this.id.toLowerCase();
                 _app.showCounty( this.id.toLowerCase() );
@@ -255,7 +255,7 @@ function App( path ){
       })
       .on('mouseout', function(){
         d3.select(this).style('stroke', '#AAA');
-        d3.select(this).style('stroke-width', 1);
+        d3.select(this).style('stroke-width', .5);
         _app.showCounty('all');
       });
   } 
@@ -402,10 +402,29 @@ function App( path ){
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders';  
     var plural = ( funders == 1 ) ? 'this' : 'these'; 
+    
 
     if ( !data ){
-      data = totals;
+      data = {
+        money: 0, 
+        grants: 0, 
+        grant_years: {
+            2009: 0,
+            2010: 0,
+            2011: 0,
+            2012: 0,
+            2013: 0
+        },
+        grant_years_dollars: {
+            2009: 0,
+            2010: 0,
+            2011: 0,
+            2012: 0,
+            2013: 0
+        }
+      };
     }
+
 
     var n = (name == 'all') ? "the <span class='stat'>Western Slope</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>5</span> years."; 
