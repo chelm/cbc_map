@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html style="background-color:#fff">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <!--link rel="stylesheet" href="css/bootstrap.min.css" /-->
+    <!--script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script-->
+    <link href='css/main.css' rel='stylesheet' type='text/css'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--[if IE]>
+      <script type="text/javascript" src="js/aight.js"></script>
+    <![endif]-->
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <!--[if IE]>
+      <script type="text/javascript" src="js/aight.d3.min.js"></script>
+    <![endif]-->
+    <script src="http://d3js.org/topojson.v0.min.js"></script>
+    <script src="js/app.js"></script>
+    <script type="text/javascript">
+      function init(){
+        window.map = new App('data/northeast.csv');
+      }
+    </script>
+    </head>
+    <body onload="javascript:init()">
+    <div id="container">
+    <div id="vis">
+      <div id="controls"></div>
+      <div id="right">
+        <div id="county_data"></div>
+        <div id="map"></div>
+        <div id="scale"></div>
+        <div id="scale-help">Colors on the map represent the number of grants awarded to groups in each county. Darker colors  equal more grants.</div>
+        <div id="county_info">
+          <div id="county_chart"></div>
+          <div id="chart_title">Total Amount ($) / Year</div>
+        </div>
+      </div>
+    </div>
+    </div>
+</body>
+</html>
