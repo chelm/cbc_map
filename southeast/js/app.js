@@ -200,6 +200,8 @@ function App( path ){
         .attr("width",460)
         .attr("height",350);
 
+      var id;
+
       vis.append("g")
         .selectAll("path")
         .data(counties.geometries)
@@ -226,12 +228,15 @@ function App( path ){
                 poly.attr('class', 'county');
                 _app.showCounty( 'all' );
                 _app.clicked_county = null;
+                delete _app.selected_county;
                 addHover();
               } else {
                 d3.select('.county.selected').attr('class', 'county');
                 poly.attr('class', 'county selected');
-                _app.clicked_county = this.id.toLowerCase();
-                _app.showCounty( this.id.toLowerCase() );
+                id = this.id.toLowerCase();
+                _app.clicked_county = id;
+                _app.selected_county = id;
+                _app.showCounty( id );
                 removeHover();
               }  
             }
@@ -285,7 +290,6 @@ function App( path ){
         .text(function(d){ return (d == 'Helen K and Arthur E Johnson Foundation') ? 'Helen K. and Arthur E. Johnson Foundation' : d; })
         .on('click', function(){
           var f = d3.select(this).data()[0];
-          
 
           d3.selectAll('.funder').attr('class', function(){
             var f = d3.select(this);
@@ -328,7 +332,9 @@ function App( path ){
           }
 
           updateCountyData();
-          _app.showCounty('all');
+          if ( typeof(_app.selected_county) == 'undefined'){
+            _app.showCounty('all');
+          }
         });
 
   }
@@ -391,7 +397,7 @@ function App( path ){
   _app.showCounty = function( name ){
 
     if (name != 'all'){
-      _app.selected_county = name;
+      //_app.selected_county = name;
     }
     
     var el = d3.select('#county_info');
@@ -449,7 +455,8 @@ function App( path ){
     var yAxis = d3.svg.axis()
         .scale(y)
         .ticks(7)
-        .orient("left")
+        .orient("left");
+
 
     var svg = d3.select('#county_chart').append('svg')
         .attr("width", width + margin.left + margin.right)
