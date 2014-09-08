@@ -28,7 +28,7 @@ function App( path ){
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
       
       var county = d.county.toLowerCase().trim();
-      if (_app.counties.indexOf(county) == -1 && d.region == 'WesternSlope') { 
+      if (_app.counties.indexOf(county) == -1 && d.region == 'Southeast') { 
         _app.counties.push(county);
       }
 
@@ -200,6 +200,8 @@ function App( path ){
         .attr("width",460)
         .attr("height",350);
 
+      var id;
+
       vis.append("g")
         .selectAll("path")
         .data(counties.geometries)
@@ -226,12 +228,15 @@ function App( path ){
                 poly.attr('class', 'county');
                 _app.showCounty( 'all' );
                 _app.clicked_county = null;
+                delete _app.selected_county;
                 addHover();
               } else {
                 d3.select('.county.selected').attr('class', 'county');
                 poly.attr('class', 'county selected');
-                _app.clicked_county = this.id.toLowerCase();
-                _app.showCounty( this.id.toLowerCase() );
+                id = this.id.toLowerCase();
+                _app.clicked_county = id;
+                _app.selected_county = id;
+                _app.showCounty( id );
                 removeHover();
               }  
             }
@@ -285,7 +290,6 @@ function App( path ){
         .text(function(d){ return (d == 'Helen K and Arthur E Johnson Foundation') ? 'Helen K. and Arthur E. Johnson Foundation' : d; })
         .on('click', function(){
           var f = d3.select(this).data()[0];
-          
 
           d3.selectAll('.funder').attr('class', function(){
             var f = d3.select(this);
@@ -328,7 +332,9 @@ function App( path ){
           }
 
           updateCountyData();
-          _app.showCounty('all');
+          if ( typeof(_app.selected_county) == 'undefined'){
+            _app.showCounty('all');
+          }
         });
 
   }
@@ -382,7 +388,7 @@ function App( path ){
       var dollar_text = "<span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g,  ',') + "</span> over <span class='stat'>5</span> years.";
     }
 
-    var n = (name == 'all') ? "the <span class='stat'>Western Slope</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g,   function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
+    var n = (name == 'all') ? "the <span class='stat'>Southeast</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g,   function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + ((!year) ? data.grants : data.grant_years[year]) + "</span> grants for a total of " + dollar_text;
     d3.select('#county_data').html(line);
 
@@ -391,7 +397,7 @@ function App( path ){
   _app.showCounty = function( name ){
 
     if (name != 'all'){
-      _app.selected_county = name;
+      //_app.selected_county = name;
     }
     
     var el = d3.select('#county_info');
@@ -426,7 +432,7 @@ function App( path ){
     }
 
 
-    var n = (name == 'all') ? "the <span class='stat'>Western Slope</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
+    var n = (name == 'all') ? "the <span class='stat'>Southeast</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>5</span> years."; 
     d3.select('#county_data').html(line);
 
@@ -449,7 +455,8 @@ function App( path ){
     var yAxis = d3.svg.axis()
         .scale(y)
         .ticks(7)
-        .orient("left")
+        .orient("left");
+
 
     var svg = d3.select('#county_chart').append('svg')
         .attr("width", width + margin.left + margin.right)
