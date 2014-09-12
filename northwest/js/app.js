@@ -28,7 +28,7 @@ function App( path ){
       if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
       
       var county = d.county.toLowerCase().trim();
-      if (_app.counties.indexOf(county) == -1 && d.region == 'Southeast') { 
+      if (_app.counties.indexOf(county) == -1 && d.region == 'Northwest') { 
         _app.counties.push(county);
       }
 
@@ -388,7 +388,7 @@ function App( path ){
       var dollar_text = "<span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g,  ',') + "</span> over <span class='stat'>5</span> years.";
     }
 
-    var n = (name == 'all') ? "the <span class='stat'>Southeast</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g,   function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
+    var n = (name == 'all') ? "the <span class='stat'>Northwest</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g,   function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + ((!year) ? data.grants : data.grant_years[year]) + "</span> grants for a total of " + dollar_text;
     d3.select('#county_data').html(line);
 
@@ -432,7 +432,7 @@ function App( path ){
     }
 
 
-    var n = (name == 'all') ? "the <span class='stat'>Southeast</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
+    var n = (name == 'all') ? "the <span class='stat'>Northwest</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>5</span> years."; 
     d3.select('#county_data').html(line);
 
