@@ -110,6 +110,12 @@ body {
         padding:0 3px;
       }
 
+      .stat {
+        font-size: 26px;
+        color:#0d8583;
+        padding:0 3px;
+      }
+
       #charts {
         height: 200px;
       }

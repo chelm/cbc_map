@@ -55,13 +55,17 @@ function App( options ){
         }
       }
     }
-    console.log(state);
     return state;
   };
 
   function showStateStats (stats) {
     var div = d3.select('#region-info');
-    div.html(['Colorado', stats.totalGrants, stats.totalAmount].join(', '));
+    var funders = (_app.selected == 'all' || !_app.selected) ? 12 : _app.selected.length;
+    var len = ( funders == 1 ) ? 'funder' : 'funders';
+    var plural = ( funders == 1 ) ? 'this' : 'these';
+    var line = "In <span class='stat'>Colorado</span>, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + stats.totalGrants.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> grants for a total of <span class='stat'>$"+Math.round(stats.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>6</span> years.";
+    //div.html(['Colorado', stats.totalGrants, stats.totalAmount].join(', '));
+    div.html(line);
     regionChart(stats);
   };
 
@@ -100,14 +104,17 @@ function App( options ){
         })
         .on('click', function(d){
           if (!_app.region){
-            //d3.select("#close-region").style('display', 'block');
-            d3.select('#region-info').html('').style('display', 'none');
-            d3.select('#region-help').style('display', 'none');
-            d3.select('#county-info').style('display', 'block');
-            d3.select('#county_data').style('display', 'block');
-            _app.region = d3.select(this).attr('data-region');
-            _app.initRegion('./data/'+_app.region+'.csv');      
-            d3.select('#scale-help').style('display', 'block');
+            if (d3.select(this).attr('data-region')){
+              //d3.select("#close-region").style('display', 'block');
+              d3.select('#region-info').html('').style('display', 'none');
+              d3.select('#region-help').style('display', 'none');
+              d3.select('#county-info').style('display', 'block');
+              d3.select('#county_data').style('display', 'block');
+              d3.select('#scale').style('display', 'block');
+              _app.region = d3.select(this).attr('data-region');
+              _app.initRegion('./data/'+_app.region+'.csv');      
+              d3.select('#scale-help').style('display', 'block');
+            }
           } else {
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
               var poly = d3.select(this);
@@ -196,83 +203,126 @@ function App( options ){
     }
   };
 
+  _app.setRegionColorScale = function ( regionName ) {
+    var colors;
+    switch (regionName) {
+      case 'Western Slope':
+        colors = ['#b7dada', '#9fcecd', '#87c2c1', '#6fb5b5', '#57a9a8', '#3e9d9c', '#269190'];
+        break;
+      case 'Northeast':
+        colors = ['#f0d1d1', '#ebc1c2', '#e6b2b3', '#e1a3a3', '#dc9394', '#d78485', '#d27576'];
+        break;
+      case 'Heart of Colorado':
+        colors = ['#c3ced5', '#afbec8', '#9baeba', '#879eac', '#738e9f', '#5f7e91', '#4b6e83'];
+        break;
+      case 'Northwest':
+        colors = ['#d1eeef', '#c2e9e9', '#b3e3e4', '#a3dedf', '#94d8d9', '#85d3d4', '#67c8ca'];
+        break;
+      case 'San Juan':
+        colors = ['#e1e1d1', '#d7d7c1', '#cdcdb2', '#c3c3a3', '#b9b993', '#afaf84', '#a5a575'];
+        break;
+      case 'Southwest':
+        colors = ['#e8e8e8', '#e0e0e0', '#d9d9d9', '#d1d1d1', '#c9c9c9', '#c2c2c2', '#b3b3b3'];
+        break;
+      case 'San Luis Valley':
+        colors = ['#e9eae2', '#e2e3d9', '#dbddcf', '#d3d6c6', '#cccfbc', '#c5c8b3', '#b7bba0'];
+        break;
+       case 'Southeast':
+        colors = ['#e0c1c2', '#d6adad', '#cc9899', '#c28485', '#b86f70', '#ae5a5c', '#a44648'];
+        break;
+      default:
+        colors = ['#b6ba9f', '#a1b19b', '#8ba896', '#74a092', '#5c978e', '#3f8e89', '#0d8585'];
+    }
+    _app.colors = d3.scale.quantile()
+      .domain([0, 275])
+      .range(colors);
+  };
+    
   _app.initRegion = function( path ){
     _app.vis = d3.select('#vis');
-    _app.cat20 = d3.scale.category10()
-      .range(['#7ED3E0', '#00B3F7' ,'#007DC5', '#0054A6', '#B2D235', '#66B345', '#00874B', '#1B5A41', '#937CB9', '#7159A6', '#4D3F99', '#362A86', '#FFDF4F', '#E7BA48', '#E29844', '#F50521']);
-    _app.orange = d3.scale.quantile()
-      .domain([0, 275])
-      .range(['#b6ba9f', '#a1b19b', '#8ba896', '#74a092', '#5c978e', '#3f8e89', '#0d8585']);
-
     _app.data = {};
+    
+    if (!_app.regionData){
+      _app.regionData = {};
+    }
 
-    d3.csv( path, function(d) {
-      if (_app.years.indexOf(+d.year) == -1) _app.years.push(+d.year);
-      if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
-      if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
-      
-      var county = d.county.toLowerCase().trim();
-      if (_app.counties.indexOf(county) == -1 && d.region == _app.region) { 
-        _app.counties.push(county);
-      }
+    _app.setRegionColorScale( _app.region );
 
-      if ( !_app.county_agg[ county ]) _app.county_agg[county] = {
-        money: 0,
-        grants: 0,
-        grant_years: {
-          2009: 0, 
-          2010: 0,
-          2011: 0,
-          2012: 0,
-          2013: 0,
-          2014: 0
-        },
-        grant_years_dollars: {
-          2009: 0,
-          2010: 0,
-          2011: 0,
-          2012: 0,
-          2013: 0,
-          2014: 0
-        },
-        nonprofits: []
-      };
-
-      _app.county_agg[ county ].money += +d.amount;
-      _app.county_agg[ county ].grants++;
-      _app.county_agg[ county ].grant_years[+d.year]++;
-      _app.county_agg[ county ].grant_years_dollars[+d.year] += +d.amount;
-      if (_app.county_agg[ county ].nonprofits.indexOf( d.nonprofit ) == -1) {
-        _app.county_agg[ county ].nonprofits.push( d.nonprofit );
-      }
-
-      var g = {
-        year: +d.year,
-        funder: d.funder,
-        nonprofit: d.nonprofit,
-        amount: +d.amount,
-        city: d.city,
-        county: d.county.trim(),
-        region: d.region,
-        type: d.type, 
-        category: d.category
-      };
-
-      // structure data by year and donor
-      if ( !_app.data[g.year] ) _app.data[g.year] = {};
-      if ( !_app.data[g.year][g.funder] ) _app.data[g.year][g.funder] = [];
-      _app.data[g.year][g.funder].push( g );
-
-      return g;
-
-    }, function(error, rows) {
-      _app.years.sort(function(a,b){ return a < b; });
-      _app.cat20.domain(_app.funders);
-      _app.grants = rows;
-
+    if (_app.regionData[_app.region]) {
+       _app.years.sort(function(a,b){ return a < b; });
+      _app.grants = _app.regionData[_app.region];
       map();
       updateCountyData();
-    });
+    } else { 
+
+      d3.csv( path, function(d) {
+        if (_app.years.indexOf(+d.year) == -1) _app.years.push(+d.year);
+        if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
+        if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
+        
+        var county = d.county.toLowerCase().trim();
+        if (_app.counties.indexOf(county) == -1 && d.region == _app.region) { 
+          _app.counties.push(county);
+        }
+
+        if ( !_app.county_agg[ county ]) _app.county_agg[county] = {
+          money: 0,
+          grants: 0,
+          grant_years: {
+            2009: 0, 
+            2010: 0,
+            2011: 0,
+            2012: 0,
+            2013: 0,
+            2014: 0
+          },
+          grant_years_dollars: {
+            2009: 0,
+            2010: 0,
+            2011: 0,
+            2012: 0,
+            2013: 0,
+            2014: 0
+          },
+          nonprofits: []
+        };
+
+        _app.county_agg[ county ].money += +d.amount;
+        _app.county_agg[ county ].grants++;
+        _app.county_agg[ county ].grant_years[+d.year]++;
+        _app.county_agg[ county ].grant_years_dollars[+d.year] += +d.amount;
+        if (_app.county_agg[ county ].nonprofits.indexOf( d.nonprofit ) == -1) {
+          _app.county_agg[ county ].nonprofits.push( d.nonprofit );
+        }
+
+        var g = {
+          year: +d.year,
+          funder: d.funder,
+          nonprofit: d.nonprofit,
+          amount: +d.amount,
+          city: d.city,
+          county: d.county.trim(),
+          region: d.region,
+          type: d.type, 
+          category: d.category
+        };
+
+        // structure data by year and donor
+        if ( !_app.data[g.year] ) _app.data[g.year] = {};
+        if ( !_app.data[g.year][g.funder] ) _app.data[g.year][g.funder] = [];
+        _app.data[g.year][g.funder].push( g );
+
+        return g;
+
+      }, function(error, rows) {
+        _app.years.sort(function(a,b){ return a < b; });
+        //_app.cat20.domain(_app.funders);
+        _app.grants = rows;
+        _app.regionData[_app.region] = rows;
+        map();
+        updateCountyData();
+      });
+    };
 
   }
 
@@ -330,7 +380,7 @@ function App( options ){
       }
     });
    
-    _app.orange.domain([0, max]);
+    _app.colors.domain([0, max]);
     updateScale();
  
     d3.select("#map").selectAll("path")
@@ -341,7 +391,7 @@ function App( options ){
       })
       .style('fill', function(d){ 
         if (county_list.indexOf(d.properties.COUNTY.toLowerCase()) != -1) { 
-          return  _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants); 
+          return  _app.colors(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants); 
         }
       });
 
@@ -356,20 +406,21 @@ function App( options ){
   function updateScale(){
     d3.select('#scale table').remove()
     d3.select('#scale').append('table').append('tr').selectAll('td')
-      .data(_app.orange.quantiles())
+      .data(_app.colors.quantiles())
       .enter().append('td')
-        .style('background', function(d){ return _app.orange(d);})
+        .style('background', function(d){ return _app.colors(d);})
         .text(function(d){ return Math.round(d);})
   }
 
   function map(){
       var id;
+      _app.setRegionColorScale( _app.region );
 
       _app.vis.append("g")
         .selectAll(".county")
           .style('fill', function(d){ 
             if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-              return _app.orange(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants)
+              return _app.colors(_app.county_agg[d.properties.COUNTY.toLowerCase()].grants)
             }
           })
           .attr("id", function(d){
@@ -378,7 +429,7 @@ function App( options ){
 
           addHover();
 
-    updateScale();
+      updateScale();
   }
 
 
@@ -438,7 +489,12 @@ function App( options ){
           build(funder);
         }
       }
-      div.html(region + ', ' + stats.totalGrants +', '+ stats.totalAmount );
+      var funders = (_app.selected == 'all' || !_app.selected) ? 12 : _app.selected.length;
+      var len = ( funders == 1 ) ? 'funder' : 'funders';
+      var plural = ( funders == 1 ) ? 'this' : 'these';
+      var line = "In the <span class='stat'>"+region+"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + stats. totalGrants.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> grants for a total of <span class='stat'>$"+Math.round(stats.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>6</span> years.";
+      div.html(line);
+      //div.html(region + ', ' + stats.totalGrants +', '+ stats.totalAmount );
       regionChart(stats);
     } else {
       showStateStats(buildStateStats());
@@ -684,6 +740,7 @@ function App( options ){
 
     bars.append("rect")
       .attr("class", "bar")
+      .style('fill', _app.colors.range()[5])
       .attr("x", function(d) { return x(d)+8; })
       .attr("width", x.rangeBand() * .75)
       .attr("y", function(d) { return y(data.grant_years_dollars[d]); })
