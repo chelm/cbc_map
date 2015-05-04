@@ -340,7 +340,7 @@ function App( options ){
     var county_list = [];
     var max = 1;
     _app.grants.forEach(function(d, i){
-      if ( funders.indexOf(d.funder.replace(/\./g, '')) != -1){ 
+      if ( funders.indexOf(d.funder) != -1){ 
         var county = d.county.toLowerCase().trim();
         if (county_list.indexOf(county) == -1) { 
           county_list.push(county);
@@ -538,7 +538,6 @@ function App( options ){
         .text(function(d){ return (d == 'Helen K and Arthur E Johnson Foundation') ? 'Helen K. and Arthur E. Johnson Foundation' : d; })
         .on('click', function(){
           var f = d3.select(this).data()[0];
-
           d3.selectAll('.funder').attr('class', function(){
             var f = d3.select(this);
             if (f[0][0].className != 'selected funder'){
