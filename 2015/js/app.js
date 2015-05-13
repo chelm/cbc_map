@@ -254,7 +254,6 @@ function App( options ){
       map();
       updateCountyData();
     } else { 
-
       d3.csv( path, function(d) {
         if (_app.years.indexOf(+d.year) == -1) _app.years.push(+d.year);
         if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
@@ -311,7 +310,6 @@ function App( options ){
         if ( !_app.data[g.year] ) _app.data[g.year] = {};
         if ( !_app.data[g.year][g.funder] ) _app.data[g.year][g.funder] = [];
         _app.data[g.year][g.funder].push( g );
-
         return g;
 
       }, function(error, rows) {
@@ -335,12 +333,11 @@ function App( options ){
       });
     }
 
-
     _app.county_agg = {};
     var county_list = [];
     var max = 1;
     _app.grants.forEach(function(d, i){
-      if ( funders.indexOf(d.funder) != -1){ 
+      if ( funders.length || funders.indexOf(d.funder) != -1){ 
         var county = d.county.toLowerCase().trim();
         if (county_list.indexOf(county) == -1) { 
           county_list.push(county);
@@ -659,7 +656,6 @@ function App( options ){
     
     var el = d3.select('#county_info');
     el.style('display', 'block');
-    
     var totals = total( _app.county_agg );
     var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
@@ -688,7 +684,6 @@ function App( options ){
         }
       };
     }
-
 
     var n = (name == 'all') ? "the <span class='stat'>"+_app.region+"</span> region" : "<span class='stat'>" + name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</span> County';
     var line = "In "+ n +", "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + data.grants + "</span> grants for a total of <span class='stat'>$"+Math.round(data.money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>6</span> years."; 

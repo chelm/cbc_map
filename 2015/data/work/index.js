@@ -12,13 +12,7 @@ csv.parse(fs.readFileSync('./2009.csv').toString(), function(err, data2009){
       out.push(row);
     }
   })
-  csv.parse(fs.readFileSync('./2010.csv').toString(), function(err, data2010){
-    data2010.forEach(function(row,i){
-      if (row[2] === region){
-        row[5] = parseFloat(row[5].replace('$','').replace(',',''));
-        out.push(row);
-      }
-    });
+    //console.log(cnt2010);
     csv.parse(fs.readFileSync('./2010.csv').toString(), function(err, data2010){
       data2010.forEach(function(row,i){
         if (row[2] === region){
@@ -68,7 +62,6 @@ csv.parse(fs.readFileSync('./2009.csv').toString(), function(err, data2009){
         });
       });
     
-    });
   })
   
 })
