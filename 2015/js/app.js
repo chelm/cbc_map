@@ -434,13 +434,25 @@ function App( options ){
     d3.selectAll('.county')
       .on('mouseover', function(d){
         if (!_app.region){
-          _app.showRegionInfo( d3.select(this).attr('data-region') );
-        } else if (d3.select(this).attr('data-region') === _app.region ) {
-          if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
-            d3.select(this).style('stroke', '#ddd');
-            d3.select(this).style('stroke-width', 2);
-            _app.showCounty( this.id.toLowerCase() );
+          var region = d3.select(this).attr('data-region');
+          if (region) {
+            _app.showRegionInfo( region );
+          } else {
+            var message = 'This map only documents grantmaking to the 52 rural Colorado counties as defined by RPD';
+            showHoverWin(message, d3.event.clientX, d3.event.clientY);
           }
+        } else {
+          if (d3.select(this).attr('data-region') === _app.region ) {
+            if (_app.counties.indexOf(d.properties.COUNTY.toLowerCase()) != -1) {
+              d3.select(this).style('stroke', '#ddd');
+              d3.select(this).style('stroke-width', 2);
+              _app.showCounty( this.id.toLowerCase() );
+            }
+          }
+        }
+        if (_app.region && (d.properties.COUNTY === 'CLEAR CREEK' || d.properties.COUNTY === 'GILPIN')){
+          var message = 'Data for Clear Creek and Gilpin Counties will be available in 2016';
+          showHoverWin(message, d3.event.clientX, d3.event.clientY);
         }
       })
       .on('mouseout', function(){
@@ -451,8 +463,22 @@ function App( options ){
           d3.select(this).style('stroke-width', .5);
           _app.showCounty('all');
         }
+        hideHoverWin();
       });
+  }
+
+  showHoverWin = function(msg, x, y){
+    console.log(x,y)
+    d3.select('#hoverwin')
+      .style('display','block')
+      .style('left', x+'px')
+      .style('top', y+'px')
+      .html(msg);
   } 
+
+  hideHoverWin = function(){
+    d3.select('#hoverwin').style('display', 'none');
+  };
 
   _app.showRegionInfo = function(region){
     var div = d3.select('#region-info');
