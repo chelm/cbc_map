@@ -468,7 +468,6 @@ function App( options ){
   }
 
   showHoverWin = function(msg, x, y){
-    console.log(x,y)
     d3.select('#hoverwin')
       .style('display','block')
       .style('left', x+'px')
