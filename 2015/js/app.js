@@ -153,7 +153,7 @@ function App( options ){
       .style('fill', function(d){
         return _app.regionColor(regions.counties[d.properties.COUNTY.toLowerCase()]);
       })
-      .style('stroke', '#AAA')
+      .style('stroke', '#333')
       .style('stroke-width', '.5')
       .style('opacity', '0.75')
 
@@ -459,7 +459,7 @@ function App( options ){
         if (!_app.region){
           _app.showRegionInfo( );
         } else {
-          d3.select(this).style('stroke', '#AAA');
+          d3.select(this).style('stroke', '#333');
           d3.select(this).style('stroke-width', .5);
           _app.showCounty('all');
         }
