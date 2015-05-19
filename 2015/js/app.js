@@ -516,7 +516,7 @@ function App( options ){
       var plural = ( funders == 1 ) ? 'this' : 'these';
       var line = "In the <span class='stat'>"+region+"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + stats. totalGrants.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> grants for a total of <span class='stat'>$"+Math.round(stats.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>6</span> years.";
       div.html(line);
-      //div.html(region + ', ' + stats.totalGrants +', '+ stats.totalAmount );
+      //div.html(region + ', ' + stats.totalGrants +', '+ stats.totalAmount )i;
       regionChart(stats);
     } else {
       showStateStats(buildStateStats());
