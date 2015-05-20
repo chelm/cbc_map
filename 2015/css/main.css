@@ -90,7 +90,7 @@ body {
       #close-region {
         position:absolute;
         color:#999;
-        font-size: 12px;
+        font-size: 15px;
         line-height:1.3em;
         margin: 0px 18px;
       }
@@ -102,6 +102,8 @@ body {
       #region-info {
         line-height:2.2em;
         height: 65px;
+        position: relative;
+        top: 20px;
       }
 
       #county_data .stat {

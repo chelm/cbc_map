@@ -716,15 +716,20 @@ function App( options ){
 
     d3.select( '#county_chart' ).select('svg').remove();
 
-    var margin = {top: 30, right: 30, bottom: 20, left: 85},
-      width = 450 - margin.left - margin.right,
+    var margin = {top: 30, right: 30, bottom: 20, left: 55},
+      width = 500 - margin.left - margin.right,
       height = 175 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
+      .rangeRoundBands([0, width], .1);
+
+    x.domain([2009, 2010, 2011, 2012, 2013, 2014]);
 
     var y = d3.scale.linear()
         .rangeRound([height, 0], .1);
+
+    y.domain([0, d3.max(Object.keys(data.grant_years_dollars), function(d) { return data.grant_years_dollars[d]; })]);
+    y.nice(6);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -732,7 +737,8 @@ function App( options ){
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .ticks(7)
+        .ticks(6)
+        .tickFormat(d3.format("s"))
         .orient("left");
 
 
@@ -741,8 +747,6 @@ function App( options ){
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    x.domain([2009, 2010, 2011, 2012, 2013, 2014]);
-    y.domain([0, d3.max(Object.keys(data.grant_years_dollars), function(d) { return data.grant_years_dollars[d]; })]);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -777,8 +781,8 @@ function App( options ){
   regionChart = function(stats){
     d3.select( '#county_chart' ).select('svg').remove();
 
-    var margin = {top: 30, right: 30, bottom: 20, left: 85},
-      width = 450 - margin.left - margin.right,
+    var margin = {top: 30, right: 30, bottom: 20, left: 55},
+      width = 500 - margin.left - margin.right,
       height = 175 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
@@ -786,6 +790,10 @@ function App( options ){
 
     var y = d3.scale.linear()
         .rangeRound([height, 0], .1);
+    
+    x.domain([2009, 2010, 2011, 2012, 2013, 2014]);
+    y.domain([0, d3.max(Object.keys(stats.amount_by_year), function(d) { return stats.amount_by_year[d]; })]);
+    y.nice(6)
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -793,7 +801,8 @@ function App( options ){
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .ticks(7)
+        .ticks(6)
+        .tickFormat(d3.format("s"))
         .orient("left");
 
     var svg = d3.select('#county_chart').append('svg')
@@ -801,8 +810,6 @@ function App( options ){
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    x.domain([2009, 2010, 2011, 2012, 2013, 2014]);
-    y.domain([0, d3.max(Object.keys(stats.amount_by_year), function(d) { return stats.amount_by_year[d]; })]);
 
     svg.append("g")
         .attr("class", "x axis")
