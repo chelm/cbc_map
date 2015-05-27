@@ -325,7 +325,7 @@ function App( options ){
         return g;
 
       }, function(error, rows) {
-        console.log(tots);
+        //console.log(tots);
         _app.years.sort(function(a,b){ return a < b; });
         //_app.cat20.domain(_app.funders);
         _app.grants = rows;
@@ -401,7 +401,7 @@ function App( options ){
         tots.grants[+d.year]++;
     });
 
-    console.log(tots)
+    //console.log(tots)
     _app.colors.domain([0, max]);
     updateScale();
  
@@ -674,7 +674,7 @@ function App( options ){
         data.grant_years_dollars[yr] += d.grant_years_dollars[yr];
       }
     }
-    console.log(agg, data.grant_years_dollars[2009], data.grant_years[2009])
+    //console.log(agg, data.grant_years_dollars[2009], data.grant_years[2009])
     return data;
   };
 
