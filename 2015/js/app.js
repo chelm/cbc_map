@@ -254,9 +254,10 @@ function App( options ){
       map();
       updateCountyData();
     } else { 
+      var tots = { grants: {}, amt: {}};
       d3.csv( path, function(d) {
         if (_app.years.indexOf(+d.year) == -1) _app.years.push(+d.year);
-        if (_app.funders.indexOf(d.funder.replace(/\./g, '')) == -1) _app.funders.push(d.funder.replace(/\./g, ''));
+        if (_app.funders.indexOf(d.funder) == -1) _app.funders.push(d.funder);
         if (_app.types.indexOf(d.type) == -1) _app.types.push(d.type);
         
         var county = d.county.toLowerCase().trim();
@@ -290,6 +291,17 @@ function App( options ){
         _app.county_agg[ county ].grants++;
         _app.county_agg[ county ].grant_years[+d.year]++;
         _app.county_agg[ county ].grant_years_dollars[+d.year] += +d.amount;
+
+        if (!tots.amt[+d.year]){
+          tots.amt[+d.year] = 0;
+        }
+        tots.amt[+d.year] += d.amount;
+
+        if (!tots.grants[+d.year]){
+          tots.grants[+d.year] = 0;
+        }
+        tots.grants[+d.year]++;
+
         if (_app.county_agg[ county ].nonprofits.indexOf( d.nonprofit ) == -1) {
           _app.county_agg[ county ].nonprofits.push( d.nonprofit );
         }
@@ -313,6 +325,7 @@ function App( options ){
         return g;
 
       }, function(error, rows) {
+        console.log(tots);
         _app.years.sort(function(a,b){ return a < b; });
         //_app.cat20.domain(_app.funders);
         _app.grants = rows;
@@ -325,6 +338,7 @@ function App( options ){
   }
 
   function updateCountyData(){
+    var tots = { grants: {}, amt: {}};
     var funders = (_app.selected == 'all') ? _app.funders : _app.selected;
     if ( funders != 'all' ) {
       //d3.selectAll('.funder').style('background', '#aaa');
@@ -337,7 +351,7 @@ function App( options ){
     var county_list = [];
     var max = 1;
     _app.grants.forEach(function(d, i){
-      if ( funders.length || funders.indexOf(d.funder) != -1){ 
+      if ( funders.length && funders.indexOf(d.funder) != -1){ 
         var county = d.county.toLowerCase().trim();
         if (county_list.indexOf(county) == -1) { 
           county_list.push(county);
@@ -375,8 +389,19 @@ function App( options ){
           _app.county_agg[ county ].nonprofits.push( d.nonprofit );
         }
       }
+
+       if (!tots.amt[+d.year]){
+          tots.amt[+d.year] = 0;
+        }
+        tots.amt[+d.year] += d.amount;
+
+        if (!tots.grants[+d.year]){
+          tots.grants[+d.year] = 0;
+        }
+        tots.grants[+d.year]++;
     });
-   
+
+    console.log(tots)
     _app.colors.domain([0, max]);
     updateScale();
  
@@ -617,7 +642,6 @@ function App( options ){
   }
 
   function total( agg ){
-
     var data = {
           money: 0,
           grants: 0,
@@ -650,13 +674,14 @@ function App( options ){
         data.grant_years_dollars[yr] += d.grant_years_dollars[yr];
       }
     }
+    console.log(agg, data.grant_years_dollars[2009], data.grant_years[2009])
     return data;
   };
 
   _app.buildCountyText = function( year ){
     var name = ( !_app.clicked_county ) ? 'all' : _app.clicked_county;
     var totals = total( _app.county_agg );
-    var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
+    var data = ( name == 'all' ) ? totals : _app.county_agg[ name ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders';
     var plural = ( funders == 1 ) ? 'this' : 'these';
@@ -682,7 +707,7 @@ function App( options ){
     var el = d3.select('#county_info');
     el.style('display', 'block');
     var totals = total( _app.county_agg );
-    var data = ( name == 'all' ) ? totals : _app.county_agg[ name.replace(/\./g,'') ];
+    var data = ( name == 'all' ) ? totals : _app.county_agg[ name ];
     var funders = (_app.selected == 'all') ? _app.funders.length : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders';  
     var plural = ( funders == 1 ) ? 'this' : 'these'; 
