@@ -15,6 +15,8 @@ var out = {"funders":["Adolph Coors Foundation","Anschutz Family Foundation","AV
 var stats = {};
 var len = regions.length;
 
+var tot = 0;
+
 (function next () {
   if (-- len < 0) {
     out.stats = stats;
@@ -39,8 +41,8 @@ var len = regions.length;
           }
         }
         stats[regions[ len ]][funder][year].count++;
-        stats[regions[ len ]][funder][year].amount += parseInt(amount);
-    
+        stats[regions[ len ]][funder][year].amount += parseInt(amount.replace('$','').replace(/,/g,''));
+        tot += parseInt(amount.replace('$','').replace(/,/g,''));
       }
     });
     next();

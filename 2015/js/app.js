@@ -24,13 +24,14 @@ function App( options ){
   }
 
   // build the state total dollars and grants
-  function buildStateStats (callback) {
+  function buildStateStats (hoverYear) {
     var state = {
         grants_by_year: {},
         amount_by_year: {},
         totalAmount: 0,
         totalGrants: 0
     };
+    var tot = 0;
     for (var r in _app.regions.stats){
       var funders = _app.regions.stats[r];
       for (var f in funders){
@@ -40,8 +41,10 @@ function App( options ){
         }
         if (selectedFunder){
           for( var y in funders[f]){
-            state.totalAmount += funders[f][y].amount;
-            state.totalGrants += funders[f][y].count;
+            if (!hoverYear || (hoverYear === y)){
+              state.totalAmount += funders[f][y].amount;
+              state.totalGrants += funders[f][y].count;
+            }
             if (!state.grants_by_year[y]){
               state.grants_by_year[y] = 0
             }
@@ -51,6 +54,7 @@ function App( options ){
               state.amount_by_year[y] = 0
             }
             state.amount_by_year[y] += funders[f][y].amount;
+            tot += parseInt(funders[f][y].amount);
           }
         }
       }
@@ -58,13 +62,13 @@ function App( options ){
     return state;
   };
 
-  function showStateStats (stats) {
+  function showStateStats (stats, hoverYear) {
     var div = d3.select('#region-info');
     var funders = (_app.selected == 'all' || !_app.selected) ? 12 : _app.selected.length;
     var len = ( funders == 1 ) ? 'funder' : 'funders';
     var plural = ( funders == 1 ) ? 'this' : 'these';
-    var line = "In <span class='stat'>Colorado</span>, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + stats.totalGrants.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> grants for a total of <span class='stat'>$"+Math.round(stats.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>6</span> years.";
-    //div.html(['Colorado', stats.totalGrants, stats.totalAmount].join(', '));
+    var timeSpan = (hoverYear) ? "in <span class='stat'>"+hoverYear+"</span>." : "over <span class='stat'>6</span> years.";
+    var line = "In rural <span class='stat'>Colorado</span>, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + stats.totalGrants.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> grants for a total of <span class='stat'>$"+Math.round(stats.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> "+timeSpan;
     div.html(line);
     regionChart(stats);
   };
@@ -325,7 +329,6 @@ function App( options ){
         return g;
 
       }, function(error, rows) {
-        //console.log(tots);
         _app.years.sort(function(a,b){ return a < b; });
         //_app.cat20.domain(_app.funders);
         _app.grants = rows;
@@ -401,7 +404,6 @@ function App( options ){
         tots.grants[+d.year]++;
     });
 
-    //console.log(tots)
     _app.colors.domain([0, max]);
     updateScale();
  
@@ -504,7 +506,7 @@ function App( options ){
     d3.select('#hoverwin').style('display', 'none');
   };
 
-  _app.showRegionInfo = function(region){
+  _app.showRegionInfo = function(region, hoverYear){
     var div = d3.select('#region-info');
     if (region){
       var stats = {
@@ -541,10 +543,9 @@ function App( options ){
       var plural = ( funders == 1 ) ? 'this' : 'these';
       var line = "In the <span class='stat'>"+region+"</span> region, "+plural+" <span class='stat'>"+ funders +"</span> " + len + " awarded <span class='stat'>" + stats. totalGrants.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> grants for a total of <span class='stat'>$"+Math.round(stats.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "</span> over <span class='stat'>6</span> years.";
       div.html(line);
-      //div.html(region + ', ' + stats.totalGrants +', '+ stats.totalAmount )i;
       regionChart(stats);
     } else {
-      showStateStats(buildStateStats());
+      showStateStats(buildStateStats(hoverYear), hoverYear);
     } 
   }
 
@@ -674,7 +675,6 @@ function App( options ){
         data.grant_years_dollars[yr] += d.grant_years_dollars[yr];
       }
     }
-    //console.log(agg, data.grant_years_dollars[2009], data.grant_years[2009])
     return data;
   };
 
@@ -856,10 +856,11 @@ function App( options ){
       .attr("y", function(d) { return y(stats.amount_by_year[d]); })
       .attr("height", function(d) { return height - y(stats.amount_by_year[d]); })
       .on('mouseover', function(d){
-        //_app.buildCountyText( d );
+        _app.showRegionInfo(null, d);
+        
       })
       .on('mouseout', function(d){
-        //_app.buildCountyText( );
+        _app.showRegionInfo(null);
       })
   }
 
