@@ -53,7 +53,6 @@ csv.parse(fs.readFileSync('./2009.csv').toString(), function(err, data2009){
               data2014.forEach(function(row,i){
                 if (row[2] === region){
                   row[5] = parseFloat(row[5].replace('$','').replace(/,/g,''));
-                  //console.log(row[5])
                   out.push(row);
                 }
               });
